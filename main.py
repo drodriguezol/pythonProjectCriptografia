@@ -38,6 +38,7 @@ class Application(ttk.Frame):
 
         #botones
 
+
 print("hola")
 ventana= tk.Tk()
 app = Application(ventana)
