@@ -63,15 +63,17 @@ class CriptoSistemas(ttk.Frame):
             text=texto.get("1.0","end-1c").replace(" ","")
             password=clave.get("1.0","end-1c")
             boolPass=True
-            if (self.combo.get())=='Desplazamiento': 
+
+            if (not text.isalpha()) and not text.split(" ")==['']:
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras en el texto.")
+                    main_window.deiconify()
+
+            elif(self.combo.get())=='Desplazamiento': 
                 try:
                     password=(int(password))
                 except:
                     boolPass=False
-                if (not text.isalpha()):
-                    messagebox.showinfo("Advertencia","Sólo se admiten letras en el texto.")
-                    main_window.deiconify()
-                elif(not boolPass):
+                if(not boolPass):
                     messagebox.showinfo("Advertencia","Sólo se admiten números naturales como clave.")
                     main_window.deiconify()
                 else:
@@ -81,33 +83,66 @@ class CriptoSistemas(ttk.Frame):
                     resultado.configure(state='disabled')
                 
             elif (self.combo.get())=="Affine" :
-                resultado.configure(state='normal')
-                resultado.delete("1.0", END)
-                resultado.configure(state='disabled')
-                if texto.get("1.0","end-1c")=="hola":
-                  resultado.configure(state='normal')
-                  resultado.insert(INSERT,"gato")
-                  resultado.configure(state='disabled')
+                password=password.split(",")
+                if(len(password)>2):
+                    boolPass=False
+                try:
+                    password[0]=(int(password[0]))
+                    password[1]=(int(password[1]))
+                except:
+                    boolPass=False
+
+                if(not boolPass):
+                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',')")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, affineCifrar(text,password))
+                    resultado.configure(state='disabled')
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","")
             password=clave.get("1.0","end-1c")
             boolPass=True
+
+            if (not text.isalpha()) and not text.split(" ")==['']:
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                    main_window.deiconify()
+
             if (self.combo.get())=='Desplazamiento':
                 try:
                     password=(int(password))
                 except:
                     boolPass=False
-                if (not text.isalpha()):
-                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
-                    main_window.deiconify()
-                elif(not boolPass):
+                
+                if(not boolPass):
                     messagebox.showinfo("Advertencia","Sólo se admiten números naturales como clave.")
                     main_window.deiconify()
-                resultado.configure(state='normal')
-                resultado.delete("1.0", END)
-                resultado.insert(INSERT, desplazamientoDescifrar(text,password))
-                resultado.configure(state='disabled')
+                else:    
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, desplazamientoDescifrar(text,password))
+                    resultado.configure(state='disabled')
+
+            elif (self.combo.get())=="Affine" :
+                password=password.split(",")
+                if(len(password)>2):
+                    boolPass=False
+                try:
+                    password[0]=(int(password[0]))
+                    password[1]=(int(password[1]))
+                except:
+                    boolPass=False
+
+                if(not boolPass):
+                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',')")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, affineDescifrar(text,password))
+                    resultado.configure(state='disabled')
 
         def copiar_al_portapapeles():
             self.clipboard_clear()
