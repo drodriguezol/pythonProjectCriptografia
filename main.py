@@ -5,6 +5,9 @@ from tkinter import ttk
 from tkinter import *
 from tkinter import Text, Tk
 import tkinter as tk
+from tkinter import messagebox
+
+from Cypher import*
 
 
 
@@ -40,41 +43,81 @@ class CriptoSistemas(ttk.Frame):
         cifrarFrame = LabelFrame(self, text="Cifrar")
         cifrarFrame.place(x=30, y=150)
 
-        ctClaro = ttk.Label(cifrarFrame, text="Texto claro")
+        ctClaro = ttk.Label(cifrarFrame, text="Texto")
         ctClaro.grid(row=0, sticky=W)
 
-        ctCifrado = ttk.Label(cifrarFrame, text="Texto cifrado")
+        ctCifrado = ttk.Label(cifrarFrame, text="Resultado")
         ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
 
-        textoClaro=Text(cifrarFrame)
-        textoClaro.grid(row=1,column=0, padx=4, pady=2)
-        textoClaro.configure(height=10,width=25, bg="light yellow")
+        texto=Text(cifrarFrame)
+        texto.grid(row=1,column=0, padx=4, pady=2)
+        texto.configure(height=10,width=25, bg="light yellow")
 
-        textoCifrado=Text(cifrarFrame)
-        textoCifrado.grid(row=1,column=1, padx=4, pady=2)
-        textoCifrado.configure(height=10,width=25, bg="light cyan", state="disabled")
+        resultado=Text(cifrarFrame)
+        resultado.grid(row=1,column=1, padx=4, pady=2)
+        resultado.configure(height=10,width=25, bg="light cyan", state="disabled")
 
 
         #funciones para los botones
         def cifrar():
-            if (self.combo.get())=="Affine" :
-                textoCifrado.configure(state='normal')
-                textoCifrado.delete("1.0", END)
-                textoCifrado.configure(state='disabled')
-                if textoClaro.get("1.0","end-1c")=="hola":
-                  textoCifrado.configure(state='normal')
-                  textoCifrado.insert(INSERT,"gato")
-                  textoCifrado.configure(state='disabled')
+            if (self.combo.get())=='Desplazamiento':
+                text=texto.get("1.0","end-1c")
+                password=clave.get("1.0","end-1c")
+                boolPass=True
+                try:
+                    password=(int(password))
+                except:
+                    boolPass=False
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras en el texto.")
+                    main_window.deiconify()
+                elif(not boolPass):
+                    messagebox.showinfo("Advertencia","Sólo se admiten números naturales como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, desplazamientoCifrar(text,password))
+                    resultado.configure(state='disabled')
+                
+            elif (self.combo.get())=="Affine" :
+                resultado.configure(state='normal')
+                resultado.delete("1.0", END)
+                resultado.configure(state='disabled')
+                if texto.get("1.0","end-1c")=="hola":
+                  resultado.configure(state='normal')
+                  resultado.insert(INSERT,"gato")
+                  resultado.configure(state='disabled')
+
+        def descifrar():
+            if (self.combo.get())=='Desplazamiento':
+                text=texto.get("1.0","end-1c")
+                password=clave.get("1.0","end-1c")
+                boolPass=True
+                try:
+                    password=(int(password))
+                except:
+                    boolPass=False
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                    main_window.deiconify()
+                elif(not boolPass):
+                    messagebox.showinfo("Advertencia","Sólo se admiten números naturales como clave.")
+                    main_window.deiconify()
+                resultado.configure(state='normal')
+                resultado.delete("1.0", END)
+                resultado.insert(INSERT, desplazamientoDescifrar(text,password))
+                resultado.configure(state='disabled')
 
         def copiar_al_portapapeles():
             self.clipboard_clear()
-            self.clipboard_append(textoCifrado.get("1.0","end-1c"))
+            self.clipboard_append(resultado.get("1.0","end-1c"))
 
         def limpiar():
-            textoCifrado.configure(state='normal')
-            textoCifrado.delete("1.0", END)
-            textoCifrado.configure(state='disabled')
-            textoClaro.delete("1.0", END)
+            resultado.configure(state='normal')
+            resultado.delete("1.0", END)
+            resultado.configure(state='disabled')
+            texto.delete("1.0", END)
 
         botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5)
         botonesFrame.grid(row=2, column=0)
@@ -90,13 +133,13 @@ class CriptoSistemas(ttk.Frame):
         botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5)
         botonCifrar.grid(row=0,column=0)
 
-        botonDescifrar =Button(botonesFrame, command=cifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
         botonDescifrar.grid(row=0,column=1)        
 
         botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5)
         botonLimpiar.grid(row=0,column=0)
 
-        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar Cifrado", padx=5, pady=5)
+        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
         botonCopiar.grid(row=0,column=1)
 '''
         botonesFrame.grid_rowconfigure(0,weight=1000)
@@ -135,7 +178,7 @@ class Inicial(ttk.Frame):
 
 
 
-
+print(desplazamientoCifrar('arroz', 1))
 ventana= tk.Tk()
 app = Inicial(ventana)
 app.mainloop()
