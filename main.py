@@ -60,10 +60,10 @@ class CriptoSistemas(ttk.Frame):
 
         #funciones para los botones
         def cifrar():
-            if (self.combo.get())=='Desplazamiento':
-                text=texto.get("1.0","end-1c")
-                password=clave.get("1.0","end-1c")
-                boolPass=True
+            text=texto.get("1.0","end-1c").replace(" ","")
+            password=clave.get("1.0","end-1c")
+            boolPass=True
+            if (self.combo.get())=='Desplazamiento': 
                 try:
                     password=(int(password))
                 except:
@@ -90,10 +90,10 @@ class CriptoSistemas(ttk.Frame):
                   resultado.configure(state='disabled')
 
         def descifrar():
+            text=texto.get("1.0","end-1c").replace(" ","")
+            password=clave.get("1.0","end-1c")
+            boolPass=True
             if (self.combo.get())=='Desplazamiento':
-                text=texto.get("1.0","end-1c")
-                password=clave.get("1.0","end-1c")
-                boolPass=True
                 try:
                     password=(int(password))
                 except:
