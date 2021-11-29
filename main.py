@@ -112,6 +112,18 @@ class CriptoSistemas(ttk.Frame):
                         resultado.delete("1.0", END)
                         resultado.insert(INSERT, affineCifrar(text,password))
                         resultado.configure(state='disabled')
+            
+            elif(self.combo.get())=='Vigenere': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, vigenereCifrar(text,password))
+                    resultado.configure(state='disabled')
+
+                        
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","")
@@ -167,6 +179,17 @@ class CriptoSistemas(ttk.Frame):
                         resultado.delete("1.0", END)
                         resultado.insert(INSERT, affineDescifrar(text,password))
                         resultado.configure(state='disabled')
+
+            elif(self.combo.get())=='Vigenere': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, vigenereDescifrar(text,password))
+                    resultado.configure(state='disabled')
+
         def copiar_al_portapapeles():
             self.clipboard_clear()
             self.clipboard_append(resultado.get("1.0","end-1c"))
