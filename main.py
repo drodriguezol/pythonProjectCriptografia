@@ -51,7 +51,7 @@ class CriptoSistemas(ttk.Frame):
 
         texto=Text(cifrarFrame)
         texto.grid(row=1,column=0, padx=4, pady=2)
-        texto.configure(height=10,width=25, bg="light yellow")
+        texto.configure(height=10,width=25, bg="light yellow", foreground="#000000")
 
         resultado=Text(cifrarFrame)
         resultado.grid(row=1,column=1, padx=4, pady=2)
@@ -210,11 +210,9 @@ class CriptoSistemas(ttk.Frame):
         instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados por una coma.")
         instruc2.grid(row=1, column=0, stick=W)
 
-'''
 
-        botonesFrame.grid_rowconfigure(0,weight=1000)
-        botonesFrame.grid_columnconfigure(4,weight=1000)
-'''
+
+
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -249,4 +247,3 @@ class Inicial(ttk.Frame):
 ventana= tk.Tk()
 app = Inicial(ventana)
 app.mainloop()
-
