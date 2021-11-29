@@ -123,6 +123,26 @@ class CriptoSistemas(ttk.Frame):
                     resultado.insert(INSERT, vigenereCifrar(text,password))
                     resultado.configure(state='disabled')
 
+            elif(self.combo.get())=='Sustitución': 
+                import random
+                letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                if (not password.isalpha() and not password.replace(" ","")==""):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    if(password==''):
+                        letras = list(letras)
+                        random.shuffle(letras)
+                        password=''.join(letras)
+                        letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+                        clave.insert(INSERT, password)
+                        messagebox.showinfo("Advertencia","La clave se ha generado automáticamente.")
+                        main_window.deiconify()
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, sustitucionCifrar(text,password,letras))
+                    resultado.configure(state='disabled')
+
                         
 
         def descifrar():
@@ -190,6 +210,16 @@ class CriptoSistemas(ttk.Frame):
                     resultado.insert(INSERT, vigenereDescifrar(text,password))
                     resultado.configure(state='disabled')
 
+            elif(self.combo.get())=='Sustitución': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, sustitucionDescifrar(text,password))
+                    resultado.configure(state='disabled')
+
         def copiar_al_portapapeles():
             self.clipboard_clear()
             self.clipboard_append(resultado.get("1.0","end-1c"))
@@ -232,6 +262,9 @@ class CriptoSistemas(ttk.Frame):
 
         instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados por una coma.")
         instruc2.grid(row=1, column=0, stick=W)
+
+        instruc3=Label(instrucciones, text="2. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente de letras.")
+        instruc3.grid(row=2, column=0, stick=W)
 
 
 class Criptoanalisis(ttk.Frame):
@@ -299,22 +332,13 @@ class Criptoanalisis(ttk.Frame):
             botonesFrame.columnconfigure((0,i), weight=2, pad=6)
             botonesFrame.columnconfigure((1,i), weight=2, pad=6)
 
-        
-
         lista = ttk.Treeview(self, columns=("Coincidencias"))
         lista.insert("",END,text='a', values= ("6"))
-
 
         lista.heading("#0", text="Caracter")
         lista.heading("Coincidencias", text="N° de Coincidencias")
         lista.place(x=400, y=38)
         lista.configure(height=1,width=2)
-        
-        
-        
-
-
-
 
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
