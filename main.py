@@ -55,7 +55,7 @@ class CriptoSistemas(ttk.Frame):
 
         resultado=Text(cifrarFrame)
         resultado.grid(row=1,column=1, padx=4, pady=2)
-        resultado.configure(height=10,width=25, bg="light cyan", state="disabled")
+        resultado.configure(height=10,width=25, bg="light cyan", foreground="#000000", state="disabled")
 
 
         #funciones para los botones
