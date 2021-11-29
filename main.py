@@ -16,11 +16,11 @@ class CriptoSistemas(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1000, height=500)
+        main_window.configure(width=1200, height=500)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
-        self.place(width=1000, height=500)
+        self.place(width=1200, height=500)
 
         opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
         opcionesCifrado.place(x=30,y=30)
@@ -71,6 +71,8 @@ class CriptoSistemas(ttk.Frame):
             elif(self.combo.get())=='Desplazamiento': 
                 try:
                     password=(int(password))
+                    if (password<0):
+                        boolPass=False
                 except:
                     boolPass=False
                 if(not boolPass):
@@ -88,18 +90,28 @@ class CriptoSistemas(ttk.Frame):
                     boolPass=False
                 try:
                     password[0]=(int(password[0]))
+                    if (password[0]<0):
+                        boolPass=False
                     password[1]=(int(password[1]))
+                    if (password[1]<0):
+                        boolPass=False
                 except:
                     boolPass=False
 
                 if(not boolPass):
-                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',')")
+                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',').")
                     main_window.deiconify()
                 else:
-                    resultado.configure(state='normal')
-                    resultado.delete("1.0", END)
-                    resultado.insert(INSERT, affineCifrar(text,password))
-                    resultado.configure(state='disabled')
+                    insert=affineCifrar(text,password)
+                    print(insert)
+                    if(insert==0):
+                         messagebox.showinfo("Advertencia","El mcd de " + str(password[0]) + " y 26 no es 1, intenta con otra clave.")
+                         main_window.deiconify()
+                    else:
+                        resultado.configure(state='normal')
+                        resultado.delete("1.0", END)
+                        resultado.insert(INSERT, affineCifrar(text,password))
+                        resultado.configure(state='disabled')
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","")
@@ -113,6 +125,8 @@ class CriptoSistemas(ttk.Frame):
             if (self.combo.get())=='Desplazamiento':
                 try:
                     password=(int(password))
+                    if (password<0):
+                        boolPass=False
                 except:
                     boolPass=False
                 
@@ -131,7 +145,11 @@ class CriptoSistemas(ttk.Frame):
                     boolPass=False
                 try:
                     password[0]=(int(password[0]))
+                    if (password[0]<0):
+                        boolPass=False
                     password[1]=(int(password[1]))
+                    if (password[1]<0):
+                        boolPass=False
                 except:
                     boolPass=False
 
@@ -139,11 +157,16 @@ class CriptoSistemas(ttk.Frame):
                     messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',')")
                     main_window.deiconify()
                 else:
-                    resultado.configure(state='normal')
-                    resultado.delete("1.0", END)
-                    resultado.insert(INSERT, affineDescifrar(text,password))
-                    resultado.configure(state='disabled')
-
+                    insert=affineDescifrar(text,password)
+                    print(insert)
+                    if(insert==0):
+                         messagebox.showinfo("Advertencia","El mcd de " + str(password[0]) + " y 26 no es 1, intenta con otra clave.")
+                         main_window.deiconify()
+                    else:
+                        resultado.configure(state='normal')
+                        resultado.delete("1.0", END)
+                        resultado.insert(INSERT, affineDescifrar(text,password))
+                        resultado.configure(state='disabled')
         def copiar_al_portapapeles():
             self.clipboard_clear()
             self.clipboard_append(resultado.get("1.0","end-1c"))
@@ -176,7 +199,19 @@ class CriptoSistemas(ttk.Frame):
 
         botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
         botonCopiar.grid(row=0,column=1)
+
+
+        instrucciones = LabelFrame(self, text="Instrucciones")
+        instrucciones.place(x=510, y= 30)
+
+        instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.")
+        instruc1.grid(row=0, column=0, stick=W)
+
+        instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados por una coma.")
+        instruc2.grid(row=1, column=0, stick=W)
+
 '''
+
         botonesFrame.grid_rowconfigure(0,weight=1000)
         botonesFrame.grid_columnconfigure(4,weight=1000)
 '''
@@ -210,10 +245,7 @@ class Inicial(ttk.Frame):
         botonCriptoanalisis =Button(clasicoFrame, command=criptosistemas, text="Criptoanálisis", padx=5, pady=5)
         botonCriptoanalisis.grid(row=0,column=2)
 
-
-
-
-print(desplazamientoCifrar('arroz', 1))
+#Inicio de la aplicación
 ventana= tk.Tk()
 app = Inicial(ventana)
 app.mainloop()

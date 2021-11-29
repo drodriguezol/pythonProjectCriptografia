@@ -11,7 +11,7 @@ def desplazamientoCifrar(texto,clave):
     return resultado
 
 def desplazamientoDescifrar(texto,clave):
-    texto.upper()
+    texto=texto.upper()
     resultado=""
     for i in range(len(texto)):
         char = texto[i]
@@ -21,7 +21,10 @@ def desplazamientoDescifrar(texto,clave):
 #AFFINE
 def affineCifrar(texto, clave):
     texto=texto.upper()
-    return ''.join([ chr((( clave[0]*(ord(t) - ord('A')) + clave[1] ) % 26)
+    if  gcd(clave[0],26)==0:
+      return 0
+    else:
+      return ''.join([ chr((( clave[0]*(ord(t) - ord('A')) + clave[1] ) % 26)
                   + ord('A')) for t in texto.upper() ])
                   
 def egcd(a, b):
@@ -42,5 +45,8 @@ def gcd(a, m):
 
 def affineDescifrar(texto, clave):
     texto=texto.upper()
-    return ''.join([ chr((( gcd(clave[0], 26)*(ord(c) - ord('A') - clave[1]))
+    if  gcd(key[0],26)==0:
+      return 0
+    else:
+      return ''.join([ chr((( gcd(clave[0], 26)*(ord(c) - ord('A') - clave[1]))
                     % 26) + ord('A')) for c in texto])
