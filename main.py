@@ -211,6 +211,86 @@ class CriptoSistemas(ttk.Frame):
         instruc2.grid(row=1, column=0, stick=W)
 
 
+class Criptoanalisis(ttk.Frame):
+    def __init__(self, main_window):
+        super().__init__(main_window)
+        main_window.title("Herramientas Criptográficas")
+        main_window.configure(width=900, height=500)
+        self.place(width=900, height=500)
+        self.style = ttk.Style()
+        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.style.theme_use('clam')
+
+        analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+        analisis.place(x=30, y=30)
+
+        textoCifrado=Label(analisis, text="Texto cifrado")
+        textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+        ctexto= Text(analisis)
+        ctexto.grid(row=1,column=0, padx=4, pady=2)
+        ctexto.configure(height=6,width=40, bg="light yellow", foreground="#000000")
+        
+        textoPlano=Label(analisis, text="Texto plano")
+        textoPlano.grid(row=2,column=0, padx=5, pady=5, sticky=W)
+        
+        ptexto= Text(analisis)
+        ptexto.grid(row=3,column=0, padx=4, pady=2)
+        ptexto.configure(height=6,width=40, bg="light cyan", foreground="#000000", state="disabled")
+
+        botonesFrame = Frame(analisis)
+        botonesFrame.grid(row=4,column=0, padx=5, pady=20)
+
+        botonAnalisis =Button(botonesFrame, command="", text="Análisis", padx=5, pady=5)
+        botonAnalisis.grid(row=0,column=0)
+
+        self.combo = ttk.Combobox(botonesFrame,state='readonly')
+        self.combo.grid(row=0, column=1)
+        self.combo["values"] = ["Desplazamiento", "Affine", "Vigenere", "Sustitución","Hill","Permutación"]
+
+        tamaño= Label(botonesFrame, text="Tamaño: ")
+        tamaño.grid(row=0, column=2)
+
+        self.combo = ttk.Combobox(botonesFrame,state='readonly')
+        self.combo.grid(row=0, column=3)
+        self.combo.configure(height=1, width=2)
+        self.combo["values"] = ["1", "2", "3", "4","5","6"]
+
+        clave= Label(botonesFrame, text="Clave: ")
+        clave.grid(row=1, column=0)
+
+        textoClave= Text(botonesFrame)
+        textoClave.grid(row=1,column=1, padx=4, pady=2)
+        textoClave.configure(height=1,width=5, foreground="#000000")
+
+        b= Label(botonesFrame, text="B: ")
+        b.grid(row=1, column=2)
+
+        textoB= Text(botonesFrame)
+        textoB.grid(row=1,column=3, padx=4, pady=2)
+        textoB.configure(height=1,width=5, foreground="#000000")
+
+
+        #espaciado entre botones
+        for i in range(3):
+            botonesFrame.columnconfigure((0,i), weight=2, pad=6)
+            botonesFrame.columnconfigure((1,i), weight=2, pad=6)
+
+        
+
+        lista = ttk.Treeview(self, columns=("Coincidencias"))
+        lista.insert("",END,text='a', values= ("6"))
+
+
+        lista.heading("#0", text="Caracter")
+        lista.heading("Coincidencias", text="N° de Coincidencias")
+        lista.place(x=400, y=38)
+        lista.configure(height=1,width=2)
+        
+        
+        
+
+
 
 
 class Inicial(ttk.Frame):
@@ -224,7 +304,6 @@ class Inicial(ttk.Frame):
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.style.theme_use('clam')
 
-
         clasicoFrame = LabelFrame(self, text="Opciones de Cifrado", bg='#DCDAD5',padx=5, pady=5)
         clasicoFrame.place(x=20,y=20)
 
@@ -234,13 +313,18 @@ class Inicial(ttk.Frame):
             app = CriptoSistemas(ventana)
             app.mainloop()
 
+        def criptoanalisis():
+            ventana= tk.Tk()
+            app = Criptoanalisis(ventana)
+            app.mainloop()
+
         botonCriptosistemas =Button(clasicoFrame, command=criptosistemas, text="Criptosistemas",padx=5, pady=5)
         botonCriptosistemas.grid(row=0,column=0)
 
         espacio = Label(clasicoFrame, text="  ", bg='#DCDAD5')
         espacio.grid(row=0, column=1)
 
-        botonCriptoanalisis =Button(clasicoFrame, command=criptosistemas, text="Criptoanálisis", padx=5, pady=5)
+        botonCriptoanalisis =Button(clasicoFrame, command=criptoanalisis, text="Criptoanálisis", padx=5, pady=5)
         botonCriptoanalisis.grid(row=0,column=2)
 
 #Inicio de la aplicación
