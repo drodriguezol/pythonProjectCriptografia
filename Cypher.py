@@ -381,3 +381,15 @@ def vigenereClave(texto):
         for i in clave:
             claveFinal+=letras[i]
         return claveFinal
+
+#SUSTITUCION
+def counts(text):
+    text.upper()
+    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    individuales = []
+    for i in letras:
+        if(not text.count(i)==0):
+            individuales.append([i,text.count(i)])
+    individuales.sort()
+
+

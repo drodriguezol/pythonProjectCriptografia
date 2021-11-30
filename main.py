@@ -417,8 +417,8 @@ class Criptoanalisis2(ttk.Frame):
         global window 
         window = main_window
         main_window.title("Criptoanálisis")
-        main_window.configure(width=900, height=800)
-        self.place(width=900, height=800)
+        main_window.configure(width=1000, height=950)
+        self.place(width=1000, height=950)
         self.style = ttk.Style()
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.style.theme_use('clam')
@@ -550,7 +550,7 @@ class Criptoanalisis2(ttk.Frame):
             botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
             botonAnalisis.grid(row=0,column=0)
 
-        elif (self.combo.get()=="Sustitución"):
+        elif (self.combo.get()=="Sustitución"):         
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
 
@@ -559,7 +559,7 @@ class Criptoanalisis2(ttk.Frame):
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
-            ctexto.configure(height=12,width=40, bg="light yellow", foreground="#000000")
+            ctexto.configure(height=20,width=40, bg="light yellow", foreground="#000000")
 
             botonesFrame = Frame(analisis)
             botonesFrame.grid(row=2,column=0, padx=5, pady=20)
@@ -579,7 +579,219 @@ class Criptoanalisis2(ttk.Frame):
             
             ptexto= Text(analisis)
             ptexto.grid(row=4,column=0, padx=4, pady=2)
-            ptexto.configure(height=12,width=40, bg="light cyan", foreground="#000000", state="disabled")
+            ptexto.configure(height=20,width=40, bg="light cyan", foreground="#000000", state="disabled")
+
+
+            letrasCombo = LabelFrame(self, text="Cambiar letras", padx=5, pady=5)
+            letrasCombo.place(x=380, y=60)
+
+            textoA=Label(letrasCombo, text="A: ")
+            textoA.grid(row=0,column=0, padx=5, pady=5, sticky=W)
+
+            comboA = ttk.Combobox(letrasCombo,state='readonly')
+            comboA.grid(row=0, column=1)
+            comboA["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboA.current(0)
+
+            textoB=Label(letrasCombo, text="B: ")
+            textoB.grid(row=1,column=0, padx=5, pady=5, sticky=W)
+
+            comboB = ttk.Combobox(letrasCombo,state='readonly')
+            comboB.grid(row=1, column=1)
+            comboB["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboB.current(1)
+
+            textoC=Label(letrasCombo, text="C: ")
+            textoC.grid(row=2,column=0, padx=5, pady=5, sticky=W)
+
+            comboC = ttk.Combobox(letrasCombo,state='readonly')
+            comboC.grid(row=2, column=1)
+            comboC["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboC.current(2)
+            
+            textoD=Label(letrasCombo, text="D: ")
+            textoD.grid(row=3,column=0, padx=5, pady=5, sticky=W)
+
+            comboD = ttk.Combobox(letrasCombo,state='readonly')
+            comboD.grid(row=3, column=1)
+            comboD["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboD.current(3)
+
+            textoE=Label(letrasCombo, text="E: ")
+            textoE.grid(row=4,column=0, padx=5, pady=5, sticky=W)
+
+            comboE = ttk.Combobox(letrasCombo,state='readonly')
+            comboE.grid(row=4, column=1)
+            comboE["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboE.current(4)
+
+            textoF=Label(letrasCombo, text="F: ")
+            textoF.grid(row=5,column=0, padx=5, pady=5, sticky=W)
+
+            comboF = ttk.Combobox(letrasCombo,state='readonly')
+            comboF.grid(row=5, column=1)
+            comboF["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboF.current(5)
+
+            textoG=Label(letrasCombo, text="G: ")
+            textoG.grid(row=6,column=0, padx=5, pady=5, sticky=W)
+
+            comboG = ttk.Combobox(letrasCombo,state='readonly')
+            comboG.grid(row=6, column=1)
+            comboG["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboG.current(6)
+
+            textoH=Label(letrasCombo, text="H: ")
+            textoH.grid(row=7,column=0, padx=5, pady=5, sticky=W)
+
+            comboH = ttk.Combobox(letrasCombo,state='readonly')
+            comboH.grid(row=7, column=1)
+            comboH["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboH.current(7)
+
+            textoI=Label(letrasCombo, text="I: ")
+            textoI.grid(row=8,column=0, padx=5, pady=5, sticky=W)
+
+            comboI = ttk.Combobox(letrasCombo,state='readonly')
+            comboI.grid(row=8, column=1)
+            comboI["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboI.current(8)
+
+            textoJ=Label(letrasCombo, text="J: ")
+            textoJ.grid(row=9,column=0, padx=5, pady=5, sticky=W)
+
+            comboJ = ttk.Combobox(letrasCombo,state='readonly')
+            comboJ.grid(row=9, column=1)
+            comboJ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboJ.current(9)
+
+            textoK=Label(letrasCombo, text="K: ")
+            textoK.grid(row=10,column=0, padx=5, pady=5, sticky=W)
+
+            comboK = ttk.Combobox(letrasCombo,state='readonly')
+            comboK.grid(row=10, column=1)
+            comboK["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboK.current(10)
+
+            textoL=Label(letrasCombo, text="L: ")
+            textoL.grid(row=11,column=0, padx=5, pady=5, sticky=W)
+
+            comboL = ttk.Combobox(letrasCombo,state='readonly')
+            comboL.grid(row=11, column=1)
+            comboL["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboL.current(11)
+
+            textoM=Label(letrasCombo, text="M: ")
+            textoM.grid(row=12,column=0, padx=5, pady=5, sticky=W)
+
+            comboM = ttk.Combobox(letrasCombo,state='readonly')
+            comboM.grid(row=12, column=1)
+            comboM["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboM.current(12)
+
+            textoN=Label(letrasCombo, text="N: ")
+            textoN.grid(row=13,column=0, padx=5, pady=5, sticky=W)
+
+            comboN = ttk.Combobox(letrasCombo,state='readonly')
+            comboN.grid(row=13, column=1)
+            comboN["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboN.current(13)
+
+            textoO=Label(letrasCombo, text="O: ")
+            textoO.grid(row=14,column=0, padx=5, pady=5, sticky=W)
+
+            comboO = ttk.Combobox(letrasCombo,state='readonly')
+            comboO.grid(row=14, column=1)
+            comboO["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboO.current(14)
+
+            textoP=Label(letrasCombo, text="P: ")
+            textoP.grid(row=15,column=0, padx=5, pady=5, sticky=W)
+
+            comboP = ttk.Combobox(letrasCombo,state='readonly')
+            comboP.grid(row=15, column=1)
+            comboP["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboP.current(15)
+
+            textoQ=Label(letrasCombo, text="Q: ")
+            textoQ.grid(row=16,column=0, padx=5, pady=5, sticky=W)
+
+            comboQ = ttk.Combobox(letrasCombo,state='readonly')
+            comboQ.grid(row=16, column=1)
+            comboQ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboQ.current(16)
+
+            textoR=Label(letrasCombo, text="R: ")
+            textoR.grid(row=17,column=0, padx=5, pady=5, sticky=W)
+
+            comboR = ttk.Combobox(letrasCombo,state='readonly')
+            comboR.grid(row=17, column=1)
+            comboR["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboR.current(17)
+
+            textoS=Label(letrasCombo, text="S: ")
+            textoS.grid(row=18,column=0, padx=5, pady=5, sticky=W)
+
+            comboS = ttk.Combobox(letrasCombo,state='readonly')
+            comboS.grid(row=18, column=1)
+            comboS["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboS.current(18)
+
+            textoT=Label(letrasCombo, text="T: ")
+            textoT.grid(row=19,column=0, padx=5, pady=5, sticky=W)
+
+            comboT = ttk.Combobox(letrasCombo,state='readonly')
+            comboT.grid(row=19, column=1)
+            comboT["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboT.current(19)
+
+            textoU=Label(letrasCombo, text="U: ")
+            textoU.grid(row=20,column=0, padx=5, pady=5, sticky=W)
+
+            comboU = ttk.Combobox(letrasCombo,state='readonly')
+            comboU.grid(row=20, column=1)
+            comboU["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboU.current(20)
+
+            textoV=Label(letrasCombo, text="V: ")
+            textoV.grid(row=21,column=0, padx=5, pady=5, sticky=W)
+
+            comboV = ttk.Combobox(letrasCombo,state='readonly')
+            comboV.grid(row=21, column=1)
+            comboV["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboV.current(21)
+
+            textoW=Label(letrasCombo, text="W: ")
+            textoW.grid(row=22,column=0, padx=5, pady=5, sticky=W)
+
+            comboW = ttk.Combobox(letrasCombo,state='readonly')
+            comboW.grid(row=22, column=1)
+            comboW["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboW.current(22)
+
+            textoX=Label(letrasCombo, text="X: ")
+            textoX.grid(row=23,column=0, padx=5, pady=5, sticky=W)
+
+            comboX = ttk.Combobox(letrasCombo,state='readonly')
+            comboX.grid(row=23, column=1)
+            comboX["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboX.current(23)
+
+            textoY=Label(letrasCombo, text="Y: ")
+            textoY.grid(row=24,column=0, padx=5, pady=5, sticky=W)
+
+            comboY = ttk.Combobox(letrasCombo,state='readonly')
+            comboY.grid(row=24, column=1)
+            comboY["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboY.current(24)
+
+            textoZ=Label(letrasCombo, text="Z: ")
+            textoZ.grid(row=25,column=0, padx=5, pady=5, sticky=W)
+
+            comboZ = ttk.Combobox(letrasCombo,state='readonly')
+            comboZ.grid(row=25, column=1)
+            comboZ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            comboZ.current(25)
 
             
 
