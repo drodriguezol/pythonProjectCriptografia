@@ -103,3 +103,77 @@ def sustitucionDescifrar(texto, clave):
     texto=texto.upper()
     duplas = dict(zip(clave, letras))
     return ''.join(duplas.get(i) for i in texto)
+
+#HILL
+import numpy as np
+
+def clave_Matriz(clave,s,claveMatriz):
+    count = 0
+    for i in range(s):
+        for j in range(s):
+            claveMatriz[i][j] = ord(clave[count])-65
+            count += 1
+    return(np.matrix(claveMatriz))
+
+def hillCifrar(texto, clave):
+    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    texto=texto.replace(" ","")
+    texto=texto.upper()
+    clave = clave.replace(" ","")
+    clave= clave.upper()
+    s=int(len(clave)**0.5)
+    matrizClave = [[0] * s for i in range(s)]
+    clave=clave_Matriz(clave,s,matrizClave)
+    letrasIndice = dict(zip(letras, range(len(letras))))
+    indiceLetras = dict(zip(range(len(letras)), letras))
+    textoCifrado = ""
+    textoIndices = []
+    for i in texto:
+        textoIndices.append(letrasIndice[i])
+    split_P = [textoIndices[i : i + int(clave.shape[0])] for i in range(0, len(textoIndices), int(clave.shape[0]))]
+    for P in split_P:
+        P = np.transpose(np.asarray(P))[:, np.newaxis]
+        while P.shape[0] != clave.shape[0]:
+            P = np.append(P, letrasIndice[" "])[:, np.newaxis]
+        P=P.T
+        numbers = np.dot(P, clave) % len(letras)
+        numbers=numbers.T
+        n = numbers.shape[0]  
+        for i in range(n):
+            number = int(numbers[i, 0])
+            textoCifrado += indiceLetras[number]
+    return textoCifrado
+
+def inversaMatriz(matriz, mod):
+    det = int(np.round(np.linalg.det(matriz)))
+    det_inv = egcd(det, mod)[1] % mod
+    invMatriz = (det_inv * np.round(det * np.linalg.inv(matriz)).astype(int) % mod)
+    return invMatriz
+
+def hillDescifrar(texto, clave):
+    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    texto=texto.replace(" ","")
+    texto=texto.upper()
+    clave = clave.replace(" ","")
+    clave= clave.upper()
+    s=int(len(clave)**0.5)
+    matrizClave = [[0] * s for i in range(s)]
+    clave=clave_Matriz(clave,s,matrizClave)
+    clave=inversaMatriz(clave, len(letras))
+    letrasIndice = dict(zip(letras, range(len(letras))))
+    indiceLetras = dict(zip(range(len(letras)), letras))
+    textoDescifrado = ""
+    textoIndices = []
+    for i in texto:
+        textoIndices.append(letrasIndice[i])
+    split_C = [textoIndices[i : i + int(clave.shape[0])]for i in range(0, len(textoIndices), int(clave.shape[0]))]
+    for C in split_C:
+        C = np.transpose(np.asarray(C))[:, np.newaxis]
+        C=C.T
+        numbers = np.dot(C,clave) % len(letras)
+        numbers=numbers.T
+        n = numbers.shape[0]
+        for i in range(n):
+            number = int(numbers[i, 0])
+            textoDescifrado += indiceLetras[number]
+    return textoDescifrado

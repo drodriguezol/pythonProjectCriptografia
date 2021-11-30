@@ -30,7 +30,7 @@ class CriptoSistemas(ttk.Frame):
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
         self.combo.grid(row=0, column=1)
-        self.combo["values"] = ["Desplazamiento", "Affine", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
 
         claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
         claveLabel.grid(row=1, column=0)
@@ -84,7 +84,7 @@ class CriptoSistemas(ttk.Frame):
                     resultado.insert(INSERT, desplazamientoCifrar(text,password))
                     resultado.configure(state='disabled')
                 
-            elif (self.combo.get())=="Affine" :
+            elif (self.combo.get())=="Afín" :
                 password=password.split(",")
                 if(len(password)>2):
                     boolPass=False
@@ -103,7 +103,6 @@ class CriptoSistemas(ttk.Frame):
                     main_window.deiconify()
                 else:
                     insert=affineCifrar(text,password)
-                    print(insert)
                     if(insert==0):
                          messagebox.showinfo("Advertencia","El mcd de " + str(password[0]) + " y 26 no es 1, intenta con otra clave.")
                          main_window.deiconify()
@@ -141,9 +140,21 @@ class CriptoSistemas(ttk.Frame):
                     resultado.configure(state='normal')
                     resultado.delete("1.0", END)
                     resultado.insert(INSERT, sustitucionCifrar(text,password,letras))
-                    resultado.configure(state='disabled')
+                    resultado.configure(state='disabled')  
 
-                        
+            elif(self.combo.get())=='Hill': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    try:
+                        resultado.insert(INSERT, hillCifrar(text,password))
+                    except:
+                        messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
+                        main_window.deiconify()
+                    resultado.configure(state='disabled')                      
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","")
@@ -171,7 +182,7 @@ class CriptoSistemas(ttk.Frame):
                     resultado.insert(INSERT, desplazamientoDescifrar(text,password))
                     resultado.configure(state='disabled')
 
-            elif (self.combo.get())=="Affine" :
+            elif (self.combo.get())=="Afín" :
                 password=password.split(",")
                 if(len(password)>2):
                     boolPass=False
@@ -218,6 +229,23 @@ class CriptoSistemas(ttk.Frame):
                     resultado.configure(state='normal')
                     resultado.delete("1.0", END)
                     resultado.insert(INSERT, sustitucionDescifrar(text,password))
+                    if resultado.get()=="":
+                        messagebox.showinfo("Hay un error con la clave. Verifique que tiene todas las letras del alfabeto sin repetirse")
+                        main_window.deiconify()
+                    resultado.configure(state='disabled')
+
+            elif(self.combo.get())=='Hill': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    try:
+                        resultado.insert(INSERT, hillDescifrar(text,password))
+                    except:
+                        messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
+                        main_window.deiconify()
                     resultado.configure(state='disabled')
 
         def copiar_al_portapapeles():
@@ -263,7 +291,7 @@ class CriptoSistemas(ttk.Frame):
         instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados por una coma.")
         instruc2.grid(row=1, column=0, stick=W)
 
-        instruc3=Label(instrucciones, text="2. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente de letras.")
+        instruc3=Label(instrucciones, text="3. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente de letras.")
         instruc3.grid(row=2, column=0, stick=W)
 
 
@@ -302,7 +330,7 @@ class Criptoanalisis(ttk.Frame):
 
         self.combo = ttk.Combobox(botonesFrame,state='readonly')
         self.combo.grid(row=0, column=1)
-        self.combo["values"] = ["Desplazamiento", "Affine", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
 
         tamaño= Label(botonesFrame, text="Tamaño: ")
         tamaño.grid(row=0, column=2)
