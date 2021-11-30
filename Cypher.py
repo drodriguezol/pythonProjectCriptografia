@@ -124,6 +124,8 @@ def hillCifrar(texto, clave):
     s=int(len(clave)**0.5)
     matrizClave = [[0] * s for i in range(s)]
     clave=clave_Matriz(clave,s,matrizClave)
+    #para evitar aceptar matrices con determinante 0
+    warning=inversaMatriz(clave, len(letras))
     letrasIndice = dict(zip(letras, range(len(letras))))
     indiceLetras = dict(zip(range(len(letras)), letras))
     textoCifrado = ""
@@ -177,3 +179,51 @@ def hillDescifrar(texto, clave):
             number = int(numbers[i, 0])
             textoDescifrado += indiceLetras[number]
     return textoDescifrado
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#CRIPTOANALISIS
+
+#DESPLAZAMIENTO
+def desplazamientoAnalisis(texto):
+    texto.upper()
+    texto=texto.replace(" ","")
+    lista=list()
+    for i in range(26):
+        lista.append("Clave "+ str(i) + " = " + desplazamientoDescifrar(texto,i))
+    return lista
+
+#AFÍN
+def affineAnalisis(texto):
+    lista=list()
+    clave=[0,0]
+    for a in range(26):
+        clave[0]=a
+        if(gcd(a,26)!=0):
+            for b in range(26):
+                clave[1]=b
+                lista.append("Clave " + "a="+str(clave[0]) + " y b=" + str(clave[1]) + " = " + affineDescifrar(texto, clave))
+    return lista
+         
+
+

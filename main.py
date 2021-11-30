@@ -146,6 +146,9 @@ class CriptoSistemas(ttk.Frame):
                 if (not password.isalpha()):
                     messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
                     main_window.deiconify()
+                elif(not int((len(password)**(0.5))**2)-len(password)==0):
+                    messagebox.showinfo("Advertencia","El tamaño de la clave debe corresponder con un número cuadrado perfecto.")
+                    main_window.deiconify()
                 else:
                     resultado.configure(state='normal')
                     resultado.delete("1.0", END)
@@ -154,7 +157,7 @@ class CriptoSistemas(ttk.Frame):
                     except:
                         messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
                         main_window.deiconify()
-                    resultado.configure(state='disabled')                      
+                    resultado.configure(state='disabled')                    
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","")
@@ -238,6 +241,9 @@ class CriptoSistemas(ttk.Frame):
                 if (not password.isalpha()):
                     messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
                     main_window.deiconify()
+                elif(not int((len(password)**(0.5))**2)-len(password)==0):
+                    messagebox.showinfo("Advertencia","El tamaño de la clave debe corresponder con un número cuadrado perfecto.")
+                    main_window.deiconify()
                 else:
                     resultado.configure(state='normal')
                     resultado.delete("1.0", END)
@@ -280,7 +286,6 @@ class CriptoSistemas(ttk.Frame):
 
         botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
         botonCopiar.grid(row=0,column=1)
-
 
         instrucciones = LabelFrame(self, text="Instrucciones")
         instrucciones.place(x=510, y= 30)
@@ -331,6 +336,7 @@ class Criptoanalisis(ttk.Frame):
         self.combo = ttk.Combobox(botonesFrame,state='readonly')
         self.combo.grid(row=0, column=1)
         self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo.bind("<<ComboboxSelected>>", self.selection_changed)
 
         tamaño= Label(botonesFrame, text="Tamaño: ")
         tamaño.grid(row=0, column=2)
@@ -368,6 +374,101 @@ class Criptoanalisis(ttk.Frame):
         lista.place(x=400, y=38)
         lista.configure(height=1,width=2)
 
+    def selection_changed(self, event):
+        print("Nuevo elemento seleccionado:", combo.get())
+
+class Criptoanalisis2(ttk.Frame):
+    def __init__(self, main_window):
+        super().__init__(main_window)
+        global window 
+        window = main_window
+        main_window.title("Criptoanálisis")
+        main_window.configure(width=900, height=800)
+        self.place(width=900, height=800)
+        self.style = ttk.Style()
+        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.style.theme_use('clam')
+
+        self.combo = ttk.Combobox(self,state='readonly')
+        self.combo.place(x=30, y=30)
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo.bind("<<ComboboxSelected>>", self.seleccion)
+
+    def seleccion(self, event):
+        if (self.combo.get()=="Desplazamiento"):
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis.place(x=30, y=60)
+
+            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+            ctexto= Text(analisis)
+            ctexto.grid(row=1,column=0, padx=4, pady=2)
+            ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
+            
+            textoPlano=Label(analisis, text="Posibles Claves")
+            textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
+            
+            ptexto= Text(analisis)
+            ptexto.grid(row=1,column=1, padx=4, pady=2)
+            ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000", state="disabled")
+
+            def analizar():
+                text=ctexto.get("1.0","end-1c").replace(" ","")
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                    window.deiconify()
+                else:
+                    lista = desplazamientoAnalisis(text)
+                    ptexto.configure(state='normal')
+                    ptexto.delete("1.0", END)
+                    for i in lista:
+                        ptexto.insert(INSERT, i+"\n")
+                    ptexto.configure(state='disabled')
+
+            botonesFrame = Frame(analisis)
+            botonesFrame.grid(row=10,column=0, padx=5, pady=20)
+
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis.grid(row=4,column=0)
+        
+        elif (self.combo.get()=="Afín"):
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis.place(x=30, y=60)
+
+            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+            ctexto= Text(analisis)
+            ctexto.grid(row=1,column=0, padx=4, pady=2)
+            ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
+            
+            textoPlano=Label(analisis, text="Posibles Claves")
+            textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
+            
+            ptexto= Text(analisis)
+            ptexto.grid(row=1,column=1, padx=4, pady=2)
+            ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000", state="disabled")
+
+            def analizar():
+                text=ctexto.get("1.0","end-1c").replace(" ","")
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                    window.deiconify()
+                else:
+                    lista = affineAnalisis(text)
+                    ptexto.configure(state='normal')
+                    ptexto.delete("1.0", END)
+                    for i in lista:
+                        ptexto.insert(INSERT, i+"\n")
+                    ptexto.configure(state='disabled')
+
+            botonesFrame = Frame(analisis)
+            botonesFrame.grid(row=10,column=0, padx=5, pady=20)
+
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis.grid(row=4,column=0)
+
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -390,7 +491,7 @@ class Inicial(ttk.Frame):
 
         def criptoanalisis():
             ventana= tk.Tk()
-            app = Criptoanalisis(ventana)
+            app = Criptoanalisis2(ventana)
             app.mainloop()
 
         botonCriptosistemas =Button(clasicoFrame, command=criptosistemas, text="Criptosistemas",padx=5, pady=5)
