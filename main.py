@@ -157,7 +157,21 @@ class CriptoSistemas(ttk.Frame):
                     except:
                         messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
                         main_window.deiconify()
-                    resultado.configure(state='disabled')                    
+                    resultado.configure(state='disabled')  
+
+            elif(self.combo.get())=='Permutación': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    try:
+                        resultado.insert(INSERT, permutacionCifrar(text,password))
+                    except:
+                        messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
+                        main_window.deiconify()
+                    resultado.configure(state='disabled')                  
 
         def descifrar():
             text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
@@ -247,6 +261,20 @@ class CriptoSistemas(ttk.Frame):
                     resultado.delete("1.0", END)
                     try:
                         resultado.insert(INSERT, hillDescifrar(text,password))
+                    except:
+                        messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
+                        main_window.deiconify()
+                    resultado.configure(state='disabled')
+
+            elif(self.combo.get())=='Permutación': 
+                if (not password.isalpha()):
+                    messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
+                    main_window.deiconify()
+                else:
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    try:
+                        resultado.insert(INSERT, permutacionDescifrar(text,password))
                     except:
                         messagebox.showinfo("Advertencia","Hay un error con la clave. Intente nuevamente.")
                         main_window.deiconify()
@@ -521,6 +549,37 @@ class Criptoanalisis2(ttk.Frame):
 
             botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
             botonAnalisis.grid(row=0,column=0)
+
+        elif (self.combo.get()=="Sustitución"):
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis.place(x=30, y=60)
+
+            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+            ctexto= Text(analisis)
+            ctexto.grid(row=1,column=0, padx=4, pady=2)
+            ctexto.configure(height=12,width=40, bg="light yellow", foreground="#000000")
+
+            botonesFrame = Frame(analisis)
+            botonesFrame.grid(row=2,column=0, padx=5, pady=20)
+
+            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ")
+            labelPosibleClave.grid(row=0,column=1,padx=20,pady=5)
+
+            textClave = Text(botonesFrame)
+            textClave.grid(row=0,column=2, padx=4, pady=5)
+            textClave.configure(height=1,width=10, foreground="#000000", state="disabled")
+
+            botonAnalisis =Button(botonesFrame, command="", text="Análisis", padx=5, pady=5)
+            botonAnalisis.grid(row=0,column=0)
+            
+            textoPlano=Label(analisis, text="Posible descifrado")
+            textoPlano.grid(row=3,column=0, padx=5, pady=5, sticky=W)
+            
+            ptexto= Text(analisis)
+            ptexto.grid(row=4,column=0, padx=4, pady=2)
+            ptexto.configure(height=12,width=40, bg="light cyan", foreground="#000000", state="disabled")
 
             
 

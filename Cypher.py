@@ -114,6 +114,13 @@ def clave_Matriz(clave,s,claveMatriz):
             count += 1
     return(np.matrix(claveMatriz))
 
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist') ######ventana emergenteee
+    else:
+        return x % m
+
 def hillCifrar(texto, clave):
     letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     texto=texto.replace(" ","")
@@ -147,7 +154,8 @@ def hillCifrar(texto, clave):
 
 def inversaMatriz(matriz, mod):
     det = int(np.round(np.linalg.det(matriz)))
-    det_inv = egcd(det, mod)[1] % mod
+    det2= int(np.round(np.linalg.det(matriz)))%26
+    det_inv = egcd(det2, mod)[1] % mod
     invMatriz = (det_inv * np.round(det * np.linalg.inv(matriz)).astype(int) % mod)
     return invMatriz
 
@@ -179,6 +187,66 @@ def hillDescifrar(texto, clave):
             textoDescifrado += indiceLetras[number]
     return textoDescifrado
 
+#PERMUTACIÓN
+import math
+
+def permutacionCifrar(msg,key):
+    cipher = ""
+    msg_len = float(len(msg))
+    msg_lst = list(msg)
+    key_lst = sorted(list(key))
+    # calcular columnas de la matriz
+    col = len(key)
+      
+    # calcular maximo filas de la matriz
+    row = int(math.ceil(msg_len / col))
+
+    # llenar de '_' a lo que falte de la matriz
+    fill_null = int((row * col) - msg_len)
+    msg_lst.extend('_' * fill_null)
+  
+    #crear la matriz con el mensaje ya separado por el tamaño de la clavee 
+    matrix = [msg_lst[i: i + col] 
+              for i in range(0, len(msg_lst), col)]
+    #por cada columna leer todos sus simbolos y hacer la permutacion
+    for row in matrix:
+        for j in range(col):
+            curr_idx = key.index(key_lst[j])
+            cipher+=''.join([row[curr_idx]])
+    return cipher
+  
+# Decryption
+def permutacionDescifrar(cipher,key):
+    decipher = ""
+    #decipher2= ""
+    msg_len = float(len(cipher))
+    msg_lst = list(cipher)
+    key_lst = sorted(list(key))
+    # calcular columnas de la matriz
+    col = len(key)
+      
+    # calcular maximo filas de la matriz
+    row = int(math.ceil(msg_len / col))
+
+    # llenar de '_' a lo que falte de la matriz
+    fill_null = int((row * col) - msg_len)
+    msg_lst.extend('_' * fill_null)
+  
+    #crear la matriz con el mensaje ya separado por el tamaño de la clave
+    matrix = [msg_lst[i: i + col] 
+              for i in range(0, len(msg_lst), col)]
+    key2=''  # sirve para volver a la antigua permutación 
+    for n in range(col):
+            curr_idx = key.index(key_lst[n])
+            key2+=''.join([key_lst[curr_idx]])
+            
+    #por cada columna leer todos sus simbolos y hacer la permutacion       
+    for row in matrix:  
+        for j in range(col):
+            curr_idx = key2.index(key_lst[j])
+            decipher+=''.join([row[curr_idx]])
+ 
+    return decipher
 
 
 
@@ -228,13 +296,13 @@ def affineAnalisis(texto):
 
 #VIGENERE
 def vigenereClave(texto):
+    texto = texto.upper()
     #la primer posición corresponde a la A, la segunda a la B y así sucesivamente
     frecuencias = [0.082, 0.015, 0.028, 0.043, 0.127, 0.022, 0.020, 0.061, 0.070, 0.002, 0.008, 0.040, 0.024, 0.067, 0.075, 0.019, 0.001, 0.060, 0.063, 0.091, 0.028, 0.010, 0.023, 0.001, 0.020, 0.001]
     letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
     #encontrando posible tamaño de la clave
-    texto = texto.upper()
     posiblesClaves = list()
-
     for i in range(len(texto) - 2):
         resultado=0
         tamaños = list()
