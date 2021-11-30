@@ -793,7 +793,14 @@ class Criptoanalisis2(ttk.Frame):
             comboZ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             comboZ.current(25)
 
-            
+
+            lista = ttk.Treeview(self, columns=("Coincidencias"), height=10)
+            lista.insert("",END,text='a', values= ("6"))
+            lista.column("#0", width=80)
+            lista.heading("#0", text="Caracter")
+            lista.heading("Coincidencias", text="N° de Coincidencias")
+            lista.place(x=600, y=60)
+            lista.configure(height=1,width=2)
 
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
