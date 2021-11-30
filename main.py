@@ -60,7 +60,7 @@ class CriptoSistemas(ttk.Frame):
 
         #funciones para los botones
         def cifrar():
-            text=texto.get("1.0","end-1c").replace(" ","")
+            text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
             password=clave.get("1.0","end-1c")
             boolPass=True
 
@@ -160,10 +160,9 @@ class CriptoSistemas(ttk.Frame):
                     resultado.configure(state='disabled')                    
 
         def descifrar():
-            text=texto.get("1.0","end-1c").replace(" ","")
+            text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
             password=clave.get("1.0","end-1c")
             boolPass=True
-
             if (not text.isalpha()) and not text.split(" ")==['']:
                     messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
                     main_window.deiconify()
@@ -204,7 +203,6 @@ class CriptoSistemas(ttk.Frame):
                     main_window.deiconify()
                 else:
                     insert=affineDescifrar(text,password)
-                    print(insert)
                     if(insert==0):
                          messagebox.showinfo("Advertencia","El mcd de " + str(password[0]) + " y 26 no es 1, intenta con otra clave.")
                          main_window.deiconify()
@@ -258,6 +256,10 @@ class CriptoSistemas(ttk.Frame):
             self.clipboard_clear()
             self.clipboard_append(resultado.get("1.0","end-1c"))
 
+        def pegar():
+            texto.delete("1.0", END)
+            texto.insert(INSERT, self.clipboard_get())
+   
         def limpiar():
             resultado.configure(state='normal')
             resultado.delete("1.0", END)
@@ -272,14 +274,18 @@ class CriptoSistemas(ttk.Frame):
         
         #espaciado entre botones
         for i in range(2):
-            botonesFrame.columnconfigure((0,i), weight=1, pad=50)
-            botonesFrame2.columnconfigure((0,i), weight=1, pad=50)
+            botonesFrame2.columnconfigure((0,i), weight=1, pad=30)
+        for i in range(3):
+            botonesFrame.columnconfigure((0,i), weight=1, pad=25)
 
         botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5)
         botonCifrar.grid(row=0,column=0)
 
         botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
-        botonDescifrar.grid(row=0,column=1)        
+        botonDescifrar.grid(row=0,column=1)  
+
+        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5)
+        botonPegar.grid(row=0,column=2)       
 
         botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5)
         botonLimpiar.grid(row=0,column=0)
@@ -414,7 +420,7 @@ class Criptoanalisis2(ttk.Frame):
             ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000", state="disabled")
 
             def analizar():
-                text=ctexto.get("1.0","end-1c").replace(" ","")
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
                 if (not text.isalpha()):
                     messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
                     window.deiconify()
@@ -451,7 +457,7 @@ class Criptoanalisis2(ttk.Frame):
             ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000", state="disabled")
 
             def analizar():
-                text=ctexto.get("1.0","end-1c").replace(" ","")
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
                 if (not text.isalpha()):
                     messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
                     window.deiconify()
@@ -468,6 +474,55 @@ class Criptoanalisis2(ttk.Frame):
 
             botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
             botonAnalisis.grid(row=4,column=0)
+
+        elif (self.combo.get()=="Vigenere"):
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis.place(x=30, y=60)
+
+            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+            ctexto= Text(analisis)
+            ctexto.grid(row=1,column=0, padx=4, pady=2)
+            ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
+            
+            textoPlano=Label(analisis, text="Posible descifrado")
+            textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
+            
+            ptexto= Text(analisis)
+            ptexto.grid(row=1,column=1, padx=4, pady=2)
+            ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000", state="disabled")
+
+            def analizar():
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                    window.deiconify()
+                else:
+                    password = vigenereClave(text)
+                    ptexto.configure(state='normal')
+                    ptexto.delete("1.0", END)
+                    ptexto.insert(INSERT, vigenereDescifrar(text,password))
+                    ptexto.configure(state='disabled')
+                    textClave.configure(state='normal')
+                    textClave.delete("1.0", END)
+                    textClave.insert(INSERT, password.upper())
+                    textClave.configure(state='disabled')
+
+            botonesFrame = Frame(analisis)
+            botonesFrame.grid(row=2,column=0, padx=5, pady=20)
+
+            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ")
+            labelPosibleClave.grid(row=0,column=1,padx=20,pady=5)
+
+            textClave = Text(botonesFrame)
+            textClave.grid(row=0,column=2, padx=4, pady=5)
+            textClave.configure(height=1,width=10, foreground="#000000", state="disabled")
+
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis.grid(row=0,column=0)
+
+            
 
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
@@ -502,6 +557,7 @@ class Inicial(ttk.Frame):
 
         botonCriptoanalisis =Button(clasicoFrame, command=criptoanalisis, text="Criptoanálisis", padx=5, pady=5)
         botonCriptoanalisis.grid(row=0,column=2)
+
 
 #Inicio de la aplicación
 ventana= tk.Tk()

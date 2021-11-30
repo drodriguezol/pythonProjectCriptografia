@@ -89,7 +89,6 @@ def vigenereDescifrar(texto, clave):
     return("" . join(textoDescifrado))
 
 #SUSTITUCIÓN
-
 #Random para generar la clave en caso de que el usuario no lo coloque
 def sustitucionCifrar(texto, clave, letras):
     texto=texto.replace(" ","")
@@ -227,3 +226,90 @@ def affineAnalisis(texto):
          
 
 
+#VIGENERE
+def vigenereClave(texto):
+    #la primer posición corresponde a la A, la segunda a la B y así sucesivamente
+    frecuencias = [0.082, 0.015, 0.028, 0.043, 0.127, 0.022, 0.020, 0.061, 0.070, 0.002, 0.008, 0.040, 0.024, 0.067, 0.075, 0.019, 0.001, 0.060, 0.063, 0.091, 0.028, 0.010, 0.023, 0.001, 0.020, 0.001]
+    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    #encontrando posible tamaño de la clave
+    texto = texto.upper()
+    posiblesClaves = list()
+
+    for i in range(len(texto) - 2):
+        resultado=0
+        tamaños = list()
+        curr = texto[i:i + 3]
+        for j in range(i + 3, len(texto) - 2):
+            if curr == texto[j:j + 3]:
+                tamaños.append(j - i)
+        if len(tamaños) != 0:
+            resultado=tamaños[0]
+            for i in range(len(tamaños)):
+                resultado=egcd(resultado,tamaños[i])[0]
+        if resultado > 1 and resultado not in posiblesClaves:
+            posiblesClaves.append(resultado)
+    posiblesClaves.sort()
+
+    for i in range(len(posiblesClaves)):
+        if posiblesClaves[i]:
+            for j in range(len(posiblesClaves)):
+                if i != j:
+                    if posiblesClaves[j]:
+                        if egcd(posiblesClaves[j], posiblesClaves[i])[0] != 1:
+                            posiblesClaves[i] = egcd(posiblesClaves[j], posiblesClaves[i])[0]
+                            posiblesClaves[j] = 0
+    while 0 in posiblesClaves:
+        posiblesClaves.remove(0)
+
+    #escogiendo las claves posiblemente correctas de las posibles claves
+    listaClaves = []
+    for m in posiblesClaves:
+        subcadenas=[]
+        for i in range(0,len(texto),m):
+            subcadenas.append(texto[i:i+m])
+        lista = list()
+        suma=0
+        for i in range(m):
+            pal=""
+            for j in subcadenas:
+                if(len(j)>i):
+                    pal+=j[i]
+            lista.append(pal)
+        for x in lista:
+            suma2=0
+            frequency = {u: sum([1 for r in x if u == r]) for u in letras}
+            for i in letras:
+                suma2=suma2 + frequency[i] * (frequency[i] - 1) / (len(x) * (len(x) - 1))
+            suma=suma+suma2
+        suma=float(suma)/float(len(lista))
+        if abs(suma-0.065)<0.0051:
+            listaClaves.append(m)
+
+    for m in listaClaves:
+        clave = list()
+        subcadenas = [texto[i:i + m] for i in range(0, len(texto), m)]
+        lista = list()
+        for i in range(m):
+            listaLetras = ""
+            for j in subcadenas:
+                if (len(j)>i):
+                    listaLetras+=j[i]
+            lista.append(listaLetras)
+        for i in range(m):
+            freq=[]
+            for x in range(len(letras)):
+                freq.append(lista[i].count(letras[x]))
+            ss = []
+            n = len(lista[i])
+            for j in range(26):
+                s = 0.0
+                for k in range(26):
+                    pos = (k + j) % 26
+                    s += ((frecuencias[k] * freq[pos]) / float(n))
+                ss.append(s)
+            sLista = ss
+            clave.append(sLista.index(max(sLista)))
+        claveFinal=""
+        for i in clave:
+            claveFinal+=letras[i]
+        return claveFinal
