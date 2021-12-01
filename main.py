@@ -8,7 +8,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from Cypher import*
-
+#DANIELCRACK
 
 #REPETICIONES
 #MONOGRAMAS
@@ -948,7 +948,7 @@ class Criptoanalisis2(ttk.Frame):
             trigramas.sort(key = lambda x: x[1])
             for i in range(8):
                 listaTripla.insert("",END,text=trigramas[7-i][0].upper(), values=(digramas[7-i][1]))
-
+            #this coomment is not funny
             listaTripla2 = ttk.Treeview(self, columns=("Recurrencia"), height=8)
             listaTripla2.column("#0", width=80)
             listaTripla2.heading("#0", text="Trigrama")
