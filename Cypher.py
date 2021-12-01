@@ -29,13 +29,11 @@ def affineCifrar(texto, clave):
                   + ord('A')) for t in texto.upper() ])
                   
 def egcd(a, b):
-    x,y, u,v = 0,1, 1,0
-    while a != 0:
-        q, r = b//a, b%a
-        m, n = x-u*q, y-v*q
-        b,a, x,y, u,v = a,r, u,v, m,n
-    gcd = b
-    return gcd, x, y
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
  
 def gcd(a, m):
     gcd, x, y = egcd(a, m)
@@ -155,7 +153,7 @@ def hillCifrar(texto, clave):
 def inversaMatriz(matriz, mod):
     det = int(np.round(np.linalg.det(matriz)))
     det2= int(np.round(np.linalg.det(matriz)))%26
-    det_inv = egcd(det2, mod)[1] % mod
+    det_inv = modinv(det2, 26)
     invMatriz = (det_inv * np.round(det * np.linalg.inv(matriz)).astype(int) % mod)
     return invMatriz
 
@@ -381,15 +379,3 @@ def vigenereClave(texto):
         for i in clave:
             claveFinal+=letras[i]
         return claveFinal
-
-#SUSTITUCION
-def counts(text):
-    text.upper()
-    letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    individuales = []
-    for i in letras:
-        if(not text.count(i)==0):
-            individuales.append([i,text.count(i)])
-    individuales.sort()
-
-

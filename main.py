@@ -10,6 +10,115 @@ from tkinter import messagebox
 from Cypher import*
 
 
+#REPETICIONES
+#MONOGRAMAS
+def frecuenciaMonogramas(text):
+ text=text.upper()
+ text=text.replace(" ","")
+ digramas=[]
+ lista_de_digramas_text=[]
+ #CONVERTIR TEXTO EN TODOS LOS POSIBLES DIGRAMAS CONCATENADOS SIN ESPACIOS
+ for i in range (len(text)):
+    try:
+     a=text[i]
+     lista_de_digramas_text.append(a)
+    except:
+      idontusethis=0
+ #DIGRAMAS AUX
+ digrams=list(set(lista_de_digramas_text))
+
+ #LISTA DE FRECUENCIA
+ digramsfrecuency=[]
+ for i in range(len(digrams)): 
+   digramsfrecuency.append(0)
+ 
+ #CONTADOR DE DIGRAMAS
+ i=0
+ for x in range(len(digrams)):
+     for y in range(len(lista_de_digramas_text)):
+       if(digrams[x]==lista_de_digramas_text[y]):
+           i=i+1
+           digramsfrecuency[x]=i
+     i=0
+ tuplas=[]
+ for xi in range(len(digrams)):
+     tupla=(digrams[xi],digramsfrecuency[xi])
+     tuplas.append(tupla)
+ tuplas_ordenadas=sorted(tuplas, key=lambda tup: tup[1],reverse=True)
+ return(tuplas_ordenadas)
+
+#DIGRAMAS
+def frecuenciaDigramas(text):
+ text=text.upper()
+ text=text.replace(" ","")
+ lista_de_digramas_text=[]
+ #CONVERTIR TEXTO EN TODOS LOS POSIBLES DIGRAMAS CONCATENADOS SIN ESPACIOS
+ for i in range (len(text)):
+    try:
+     a=text[i]+text[i+1]
+     lista_de_digramas_text.append(a)
+    except:
+      idontusethis=0
+ #DIGRAMAS AUX
+ digrams=list(set(lista_de_digramas_text))
+
+ #LISTA DE FRECUENCIA
+ digramsfrecuency=[]
+ for i in range(len(digrams)): 
+   digramsfrecuency.append(0)
+ 
+ #CONTADOR DE DIGRAMAS
+ i=0
+ for x in range(len(digrams)):
+     for y in range(len(lista_de_digramas_text)):
+       if(digrams[x]==lista_de_digramas_text[y]):
+           i=i+1
+           digramsfrecuency[x]=i
+     i=0
+ tuplas=[]
+ for xi in range(len(digrams)):
+     tupla=(digrams[xi],digramsfrecuency[xi])
+     tuplas.append(tupla)
+ tuplas_ordenadas=sorted(tuplas, key=lambda tup: tup[1],reverse=True)
+ return(tuplas_ordenadas)
+
+
+#TRIGRAMAS
+def frecuenciaTrigramas(text): 
+  text=text.upper()
+  text=text.replace(" ","")
+  #trigrams=['the', 'and', 'tha', 'ent', 'ing', 'ion', 'tio', 'for', 'nde', 'has', 'nce', 'edt', 'tis', 'oft', 'sth', 'men']
+  trigrams=[]
+  lista_de_trigramas_text=[]
+  #CONVERTIR TEXTO EN TODOS LOS POSIBLES DIGRAMAS CONCATENADOS SIN ESPACIOS
+  for i in range (len(text)):
+     try:
+      a=text[i]+text[i+1]+text[i+2]
+      lista_de_trigramas_text.append(a) 
+     except:
+        #print(lista_de_trigramas_text)
+        idontusethis=0
+  #LISTA DE FRECUENCIA
+  trigrams=list(set(lista_de_trigramas_text))
+  trigramsfrecuency=[]
+  for i in range(len(trigrams)): 
+    trigramsfrecuency.append(0)
+  text=text.replace(" ","")
+  #CONTADOR DE TRIGRAMAS
+  i=0
+  for x in range(len(trigrams)):
+      for y in range(len(lista_de_trigramas_text)):
+        if(trigrams[x]==lista_de_trigramas_text[y]):
+            i=i+1
+            trigramsfrecuency[x]=i
+      i=0
+  tuplas=[]
+  for xi in range(len(trigrams)):
+     tupla=(trigrams[xi],trigramsfrecuency[xi])
+     tuplas.append(tupla)
+  tuplas_ordenadas=sorted(tuplas, key=lambda tup: tup[1],reverse=True)
+  return(tuplas_ordenadas)
+
 
 
 class CriptoSistemas(ttk.Frame):
@@ -334,91 +443,14 @@ class CriptoSistemas(ttk.Frame):
         instruc3.grid(row=2, column=0, stick=W)
 
 
-class Criptoanalisis(ttk.Frame):
-    def __init__(self, main_window):
-        super().__init__(main_window)
-        main_window.title("Herramientas Criptográficas")
-        main_window.configure(width=900, height=500)
-        self.place(width=900, height=500)
-        self.style = ttk.Style()
-        self.style.configure("TCombobox", fieldbackground="orange", background="white")
-        self.style.theme_use('clam')
-
-        analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
-        analisis.place(x=30, y=30)
-
-        textoCifrado=Label(analisis, text="Texto cifrado")
-        textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
-
-        ctexto= Text(analisis)
-        ctexto.grid(row=1,column=0, padx=4, pady=2)
-        ctexto.configure(height=6,width=40, bg="light yellow", foreground="#000000")
-        
-        textoPlano=Label(analisis, text="Texto plano")
-        textoPlano.grid(row=2,column=0, padx=5, pady=5, sticky=W)
-        
-        ptexto= Text(analisis)
-        ptexto.grid(row=3,column=0, padx=4, pady=2)
-        ptexto.configure(height=6,width=40, bg="light cyan", foreground="#000000", state="disabled")
-
-        botonesFrame = Frame(analisis)
-        botonesFrame.grid(row=4,column=0, padx=5, pady=20)
-
-        botonAnalisis =Button(botonesFrame, command="", text="Análisis", padx=5, pady=5)
-        botonAnalisis.grid(row=0,column=0)
-
-        self.combo = ttk.Combobox(botonesFrame,state='readonly')
-        self.combo.grid(row=0, column=1)
-        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
-        self.combo.bind("<<ComboboxSelected>>", self.selection_changed)
-
-        tamaño= Label(botonesFrame, text="Tamaño: ")
-        tamaño.grid(row=0, column=2)
-
-        self.combo = ttk.Combobox(botonesFrame,state='readonly')
-        self.combo.grid(row=0, column=3)
-        self.combo.configure(height=1, width=2)
-        self.combo["values"] = ["1", "2", "3", "4","5","6"]
-
-        clave= Label(botonesFrame, text="Clave: ")
-        clave.grid(row=1, column=0)
-
-        textoClave= Text(botonesFrame)
-        textoClave.grid(row=1,column=1, padx=4, pady=2)
-        textoClave.configure(height=1,width=5, foreground="#000000")
-
-        b= Label(botonesFrame, text="B: ")
-        b.grid(row=1, column=2)
-
-        textoB= Text(botonesFrame)
-        textoB.grid(row=1,column=3, padx=4, pady=2)
-        textoB.configure(height=1,width=5, foreground="#000000")
-
-
-        #espaciado entre botones
-        for i in range(3):
-            botonesFrame.columnconfigure((0,i), weight=2, pad=6)
-            botonesFrame.columnconfigure((1,i), weight=2, pad=6)
-
-        lista = ttk.Treeview(self, columns=("Coincidencias"))
-        lista.insert("",END,text='a', values= ("6"))
-
-        lista.heading("#0", text="Caracter")
-        lista.heading("Coincidencias", text="N° de Coincidencias")
-        lista.place(x=400, y=38)
-        lista.configure(height=1,width=2)
-
-    def selection_changed(self, event):
-        print("Nuevo elemento seleccionado:", combo.get())
-
 class Criptoanalisis2(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
-        global window 
+        global window
         window = main_window
         main_window.title("Criptoanálisis")
-        main_window.configure(width=1000, height=950)
-        self.place(width=1000, height=950)
+        main_window.configure(width=1400, height=950)
+        self.place(width=1400, height=950)
         self.style = ttk.Style()
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.style.theme_use('clam')
@@ -429,7 +461,12 @@ class Criptoanalisis2(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
     def seleccion(self, event):
+        
+
+
         if (self.combo.get()=="Desplazamiento"):
+            self = Criptoanalisis2(window)
+            self.combo.current(0)
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
 
@@ -467,6 +504,8 @@ class Criptoanalisis2(ttk.Frame):
             botonAnalisis.grid(row=4,column=0)
         
         elif (self.combo.get()=="Afín"):
+            self = Criptoanalisis2(window)
+            self.combo.current(1)
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
 
@@ -504,6 +543,8 @@ class Criptoanalisis2(ttk.Frame):
             botonAnalisis.grid(row=4,column=0)
 
         elif (self.combo.get()=="Vigenere"):
+            self = Criptoanalisis2(window)
+            self.combo.current(2)
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
 
@@ -545,12 +586,14 @@ class Criptoanalisis2(ttk.Frame):
 
             textClave = Text(botonesFrame)
             textClave.grid(row=0,column=2, padx=4, pady=5)
-            textClave.configure(height=1,width=10, foreground="#000000", state="disabled")
+            textClave.configure(height=1,width=10, foreground="#000000", background="#FFFFFF", state="disabled")
 
             botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
             botonAnalisis.grid(row=0,column=0)
 
-        elif (self.combo.get()=="Sustitución"):         
+        elif (self.combo.get()=="Sustitución"):
+            self = Criptoanalisis2(window)
+            self.combo.current(3)         
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
 
@@ -559,27 +602,84 @@ class Criptoanalisis2(ttk.Frame):
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
-            ctexto.configure(height=20,width=40, bg="light yellow", foreground="#000000")
+            ctexto.configure(height=19,width=40, bg="light yellow", foreground="#000000")
 
             botonesFrame = Frame(analisis)
             botonesFrame.grid(row=2,column=0, padx=5, pady=20)
 
             labelPosibleClave = Label(botonesFrame, text="Posible Clave: ")
-            labelPosibleClave.grid(row=0,column=1,padx=20,pady=5)
+            labelPosibleClave.grid(row=1,column=0,padx=10,pady=5)
 
             textClave = Text(botonesFrame)
-            textClave.grid(row=0,column=2, padx=4, pady=5)
-            textClave.configure(height=1,width=10, foreground="#000000", state="disabled")
+            textClave.grid(row=1,column=1, padx=4, pady=5)
+            textClave.configure(height=1,width=26, foreground="#000000")
+            textClave.insert(INSERT,"ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            textClave.configure(state="disabled")
 
-            botonAnalisis =Button(botonesFrame, command="", text="Análisis", padx=5, pady=5)
+            def ingresarFrecuencias():
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
+                if(text==""):
+                    print("aqui")
+
+                listaMonogramas = frecuenciaMonogramas(text)
+                listaMono2.delete(*listaMono2.get_children())
+                for i in range(len(listaMonogramas)):
+                    listaMono2.insert("",END,text=listaMonogramas[i][0], values=(listaMonogramas[i][1]))
+
+                listaDigramas = frecuenciaDigramas(text)
+                listaDupla2.delete(*listaDupla2.get_children())
+                for i in range(len(listaDigramas)):
+                    listaDupla2.insert("",END,text=listaDigramas[i][0], values=(listaDigramas[i][1]))
+
+                listaTrigramas = frecuenciaTrigramas(text)
+                listaTripla2.delete(*listaTripla2.get_children())
+                for i in range(len(listaTrigramas)):
+                    listaTripla2.insert("",END,text=listaTrigramas[i][0], values=(listaTrigramas[i][1]))
+
+                
+            botonAnalisis =Button(botonesFrame, command=ingresarFrecuencias, text="Análisis", padx=5, pady=5)
             botonAnalisis.grid(row=0,column=0)
+
+            def descifrar():
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
+
+                passSuma=""
+                passSuma=passSuma+comboA.get()+comboB.get()+comboC.get()+comboD.get()+comboE.get()+comboF.get()+comboG.get()+comboH.get()+comboI.get()+comboJ.get()
+                passSuma=passSuma+comboK.get()+comboL.get()+comboM.get()+comboN.get()+comboO.get()+comboP.get()+comboQ.get()+comboR.get()+comboS.get()+comboT.get()
+                passSuma=passSuma+comboU.get()+comboV.get()+comboW.get()+comboX.get()+comboY.get()+comboZ.get()
+
+                textClave.configure(state="normal")
+                textClave.delete("1.0", END)
+                textClave.insert(INSERT,passSuma)
+                textClave.configure(state="disabled")
+
+
+                password=textClave.get("1.0","end-1c")
+                boolPass=True
+                if (not text.isalpha()) and not text.split(" ")==['']:
+                        messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
+                        window.deiconify()
+                for i in list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"):
+                    if i not in list(password):
+                        boolPass=False
+                if (not boolPass):
+                        messagebox.showinfo("Advertencia","Debe generar una clave que contenga todas las letras.")
+                        window.deiconify()
+                else:
+                    ptexto.configure(state='normal')
+                    ptexto.delete("1.0", END)
+                    ptexto.insert(INSERT, sustitucionDescifrar(text,password))
+                    ptexto.configure(state='disabled')               
+
+            botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
+            botonDescifrar.grid(row=0,column=1)
             
             textoPlano=Label(analisis, text="Posible descifrado")
             textoPlano.grid(row=3,column=0, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
             ptexto.grid(row=4,column=0, padx=4, pady=2)
-            ptexto.configure(height=20,width=40, bg="light cyan", foreground="#000000", state="disabled")
+            ptexto.configure(height=19,width=40, bg="light cyan", foreground="#000000", state="disabled")
 
 
             letrasCombo = LabelFrame(self, text="Cambiar letras", padx=5, pady=5)
@@ -793,14 +893,69 @@ class Criptoanalisis2(ttk.Frame):
             comboZ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             comboZ.current(25)
 
+            botonAnalisis =Button(self, command="", text="Análisis", padx=5, pady=5)
+            botonAnalisis.place(x=500,y=1000)
 
-            lista = ttk.Treeview(self, columns=("Coincidencias"), height=10)
-            lista.insert("",END,text='a', values= ("6"))
-            lista.column("#0", width=80)
-            lista.heading("#0", text="Caracter")
-            lista.heading("Coincidencias", text="N° de Coincidencias")
-            lista.place(x=600, y=60)
-            lista.configure(height=1,width=2)
+            listaMono = ttk.Treeview(self, columns=("Probabilidad"), height=26)
+            listaMono.column("#0", width=80)
+            listaMono.heading("#0", text="Caracter")
+            listaMono.column("Probabilidad", width=80)
+            listaMono.heading("Probabilidad", text="Frecuencia")
+            listaMono.place(x=600, y=60)
+            frec=[0.082, 0.015, 0.028, 0.043, 0.127, 0.022, 0.020, 0.061, 0.070, 0.002, 0.008, 0.040, 0.024, 0.067, 0.075, 0.019, 0.001, 0.060, 0.063, 0.091, 0.028, 0.010, 0.023, 0.001, 0.020, 0.001]
+            letras = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+            listaDuplas=list()
+            for i in range(26):
+                listaDuplas.append([letras[i],frec[i]])
+            listaDuplas.sort(key = lambda x: x[1])
+            for i in range(26):
+                listaMono.insert("",END,text=listaDuplas[25-i][0], values=(listaDuplas[25-i][1]))
+
+            listaMono2 = ttk.Treeview(self, columns=("Recurrencia"), height=26)
+            listaMono2.column("#0", width=80)
+            listaMono2.heading("#0", text="Caracter")
+            listaMono2.column("Recurrencia", width=80)
+            listaMono2.heading("Recurrencia", text="Repeticiones")
+            listaMono2.place(x=800, y=60)
+
+            listaDupla = ttk.Treeview(self, columns=("Probabilidad"), height=16)
+            listaDupla.column("#0", width=80)
+            listaDupla.heading("#0", text="Digrama")
+            listaDupla.column("Probabilidad", width=80)
+            listaDupla.heading("Probabilidad", text="Frecuencia")
+            listaDupla.place(x=1000, y=60)
+            digramas = [('he',0.0128), ('th', 0.0152), ('in', 0.0094), ('er', 0.0094), ('an', 0.0084), ('re', 0.0064), ('nd', 0.0063),
+                ('at', 0.0059), ('on', 0.0057), ('nt', 0.0056), ('ha', 0.0056), ('es', 0.0056), ('st', 0.0055), ('en', 0.0055),
+                ('ed', 0.0053), ('to', 0.0052)]
+            digramas.sort(key = lambda x: x[1])
+            for i in range(16):
+                listaDupla.insert("",END,text=digramas[15-i][0].upper(), values=(digramas[15-i][1]))
+            listaDupla2 = ttk.Treeview(self, columns=("Recurrencia"), height=16)
+            listaDupla2.column("#0", width=80)
+            listaDupla2.heading("#0", text="Digrama")
+            listaDupla2.column("Recurrencia", width=80)
+            listaDupla2.heading("Recurrencia", text="Repeticiones")
+            listaDupla2.place(x=1200, y=60)
+            
+            listaTripla = ttk.Treeview(self, columns=("Probabilidad"), height=8)
+            listaTripla.column("#0", width=80)
+            listaTripla.heading("#0", text="Trigrama")
+            listaTripla.column("Probabilidad", width=80)
+            listaTripla.heading("Probabilidad", text="Frecuencia")
+            listaTripla.place(x=600, y=630)
+            trigramas = [('the', 0.0181), ('and', 0.0073), ('tha', 0.0033), ('ent', 0.0042), ('ing', 0.007), ('ion', 0.0042), ('tio', 0.0031),
+                 ('for', 0.0034)]
+            trigramas.sort(key = lambda x: x[1])
+            for i in range(8):
+                listaTripla.insert("",END,text=trigramas[7-i][0].upper(), values=(digramas[7-i][1]))
+
+            listaTripla2 = ttk.Treeview(self, columns=("Recurrencia"), height=8)
+            listaTripla2.column("#0", width=80)
+            listaTripla2.heading("#0", text="Trigrama")
+            listaTripla2.column("Recurrencia", width=80)
+            listaTripla2.heading("Recurrencia", text="Repeticiones")
+            listaTripla2.place(x=800, y=630)
+
 
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
@@ -824,6 +979,7 @@ class Inicial(ttk.Frame):
 
         def criptoanalisis():
             ventana= tk.Tk()
+            global app
             app = Criptoanalisis2(ventana)
             app.mainloop()
 
