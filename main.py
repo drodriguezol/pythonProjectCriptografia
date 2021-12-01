@@ -6,8 +6,18 @@ from tkinter import *
 from tkinter import Text, Tk
 import tkinter as tk
 from tkinter import messagebox
+from PIL import ImageTk,Image
+from io import BytesIO
 
 from Cypher import*
+
+
+
+def _photo_image(image: np.ndarray):
+    height, width = image.shape[0],image.shape[1]
+    data = f'P5 {width} {height} 255 '.encode() + image.astype(np.uint8).tobytes()
+    return tk.PhotoImage(width=width, height=height, data=data, format='PPM')
+
 
 
 #REPETICIONES
@@ -124,6 +134,8 @@ def frecuenciaTrigramas(text):
 class CriptoSistemas(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
+        global mainWindow
+        mainWindow=main_window
         main_window.title("Criptosistemas Clásicos")
         main_window.configure(width=1200, height=500)
         self.style = ttk.Style()
@@ -139,7 +151,8 @@ class CriptoSistemas(ttk.Frame):
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
         self.combo.grid(row=0, column=1)
-        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación", "Hill para Imagen"]
+        self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
         claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
         claveLabel.grid(row=1, column=0)
@@ -148,7 +161,6 @@ class CriptoSistemas(ttk.Frame):
         clave.grid(row=1,column=1, sticky=W)
         clave.configure(height=1,width=16, padx=5, pady=5)
 
-        #flat, groove, raised, ridge, solid, or sunken
         cifrarFrame = LabelFrame(self, text="Cifrar")
         cifrarFrame.place(x=30, y=150)
 
@@ -322,7 +334,7 @@ class CriptoSistemas(ttk.Frame):
                     boolPass=False
 
                 if(not boolPass):
-                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',')")
+                    messagebox.showinfo("Advertencia","Hay un error con la clave. Digite los dos números separados por una coma (',').")
                     main_window.deiconify()
                 else:
                     insert=affineDescifrar(text,password)
@@ -354,7 +366,7 @@ class CriptoSistemas(ttk.Frame):
                     resultado.delete("1.0", END)
                     resultado.insert(INSERT, sustitucionDescifrar(text,password))
                     if resultado.get()=="":
-                        messagebox.showinfo("Hay un error con la clave. Verifique que tiene todas las letras del alfabeto sin repetirse")
+                        messagebox.showinfo("Hay un error con la clave. Verifique que tiene todas las letras del alfabeto sin repetirse.")
                         main_window.deiconify()
                     resultado.configure(state='disabled')
 
@@ -443,6 +455,77 @@ class CriptoSistemas(ttk.Frame):
         instruc3.grid(row=2, column=0, stick=W)
 
 
+
+
+    def seleccion(self, event):
+        if (self.combo.get()=="Hill para Imagen"):
+            self = CriptoSistemasImagen(mainWindow)
+            self.combo.current(6)
+
+
+class CriptoSistemasImagen(ttk.Frame):
+    def __init__(self, main_window):
+        super().__init__(main_window)
+        main_window.title("Criptosistemas Clásicos")
+        main_window.configure(width=1200, height=1200)
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.place(width=1200, height=1200)
+
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        opcionesCifrado.place(x=30,y=30)
+
+        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5)
+        cifradorLabel.grid(row=0, column=0)
+
+        self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
+        self.combo.grid(row=0, column=1)
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación", "Hill para Imagen"]
+        self.combo.bind("<<ComboboxSelected>>", self.seleccion)
+
+        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
+        claveLabel.grid(row=1, column=0)
+
+        clave=Text(opcionesCifrado)
+        clave.grid(row=1,column=1, sticky=W)
+        clave.configure(height=1,width=16, padx=5, pady=5)
+
+
+
+
+        imageLoad=loadImage("https://3.bp.blogspot.com/-Tyz_OhUYNfk/WK4_z7fUh_I/AAAAAAAAUG8/IC3nN-vNThsfbNGm18VD0NrdWkDALMO7wCLcB/w680/como%2Bdibujar%2Bpato%2B0%2B%25281%2529.gif")
+        self.python_image=ImageTk.PhotoImage(file='imagen.jpg')
+        #im = Image.open(BytesIO(imageLoad))
+        #imageTk= _photo_image('imagen.jpg')
+        imageLabel= Label(self,image=self.python_image)
+        imageLabel.place(x=200, y=120)
+
+
+
+
+
+    def seleccion(self, event):
+        index=0
+        if (self.combo.get()=="Desplazamiento"):
+                index=0
+        elif (self.combo.get()=="Afín"):
+                index=1
+        elif (self.combo.get()=="Vigenere"):
+                index=2
+        elif (self.combo.get()=="Sustitución"):
+                index=3
+        elif (self.combo.get()=="Hill"):
+                index=4
+        elif (self.combo.get()=="Permutación"):
+                index=5
+        if (not self.combo.get()=="Hill para Imagen"):
+            self = CriptoSistemas(mainWindow)
+            self.combo.current(index)
+            
+            
+
+
 class Criptoanalisis2(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -461,9 +544,6 @@ class Criptoanalisis2(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
     def seleccion(self, event):
-        
-
-
         if (self.combo.get()=="Desplazamiento"):
             self = Criptoanalisis2(window)
             self.combo.current(0)
@@ -973,12 +1053,12 @@ class Inicial(ttk.Frame):
 
             #funciones para los botones
         def criptosistemas():
-            ventana= tk.Tk()
+            ventana= tk.Toplevel()
             app = CriptoSistemas(ventana)
             app.mainloop()
 
         def criptoanalisis():
-            ventana= tk.Tk()
+            ventana= tk.Toplevel()
             global app
             app = Criptoanalisis2(ventana)
             app.mainloop()

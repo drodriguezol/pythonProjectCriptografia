@@ -379,3 +379,45 @@ def vigenereClave(texto):
         for i in clave:
             claveFinal+=letras[i]
         return claveFinal
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import requests
+import imageio as iio
+
+def loadImage(url):
+    f = open('imagen.jpg', 'wb')
+    f.write(requests.get(url).content)
+    f.close()
+    image = iio.imread('imagen.jpg')
+    
+    reshape = 1
+
+    for i in image.shape:
+        reshape *= i
+
+    return image.reshape((1, reshape)), image.shape
+
+
+
+
