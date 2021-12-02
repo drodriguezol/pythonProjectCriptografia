@@ -9,6 +9,7 @@
 # Instalación:
 ```
 $ pip install -r requirements.txt
+pip install tk
 ```
 # Clonar Repositorio
 ```
