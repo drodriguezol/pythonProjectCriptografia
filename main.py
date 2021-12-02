@@ -267,7 +267,7 @@ class CriptoSistemas(ttk.Frame):
                 if (not password.isalpha()):
                     messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
                     main_window.deiconify()
-                elif(not int((len(password)**(0.5))**2)-len(password)==0):
+                elif (not int((len(password)**0.5) + 0.5) ** 2 == len(password)):
                     messagebox.showinfo("Advertencia","El tamaño de la clave debe corresponder con un número cuadrado perfecto.")
                     main_window.deiconify()
                 else:
@@ -408,6 +408,26 @@ class CriptoSistemas(ttk.Frame):
         def pegar():
             texto.delete("1.0", END)
             texto.insert(INSERT, self.clipboard_get())
+        def generarclave():
+            if ((self.combo.get()) == 'Desplazamiento'):
+                clave.delete("1.0", END)
+                clave.insert(1.0,"7")
+            elif ((self.combo.get()) == 'Afín'):
+                clave.delete("1.0", END)
+                clave.insert(1.0, "5,6")
+            elif ((self.combo.get()) == 'Vigenere'):
+                clave.delete("1.0", END)
+                clave.insert(1.0, "CIPHER")
+            elif ((self.combo.get()) == 'Sustitución'):
+                clave.delete("1.0", END)
+                clave.insert(1.0, "XNYAHPOGZQWBTSFLRCVMUEKJDI")
+            elif ((self.combo.get()) == 'Hill'):
+                clave.delete("1.0", END)
+                clave.insert(1.0, "LIDH")
+            elif ((self.combo.get()) == 'Permutación'):
+                clave.delete("1.0", END)
+                clave.insert(1.0, "CFABD")
+
    
         def limpiar():
             resultado.configure(state='normal')
@@ -441,6 +461,9 @@ class CriptoSistemas(ttk.Frame):
 
         botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
         botonCopiar.grid(row=0,column=1)
+        
+        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5)
+        botonGenerarClave.grid(row=0,column=3)
 
         instrucciones = LabelFrame(self, text="Instrucciones")
         instrucciones.place(x=510, y= 30)
@@ -453,6 +476,18 @@ class CriptoSistemas(ttk.Frame):
 
         instruc3=Label(instrucciones, text="3. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente de letras.")
         instruc3.grid(row=2, column=0, stick=W)
+        
+        instruc4 = Label(instrucciones,
+                         text="4. Para el cifrado de sustitución, la clave es un permutacion del abecedario usual usado")
+        instruc4.grid(row=3, column=0, stick=W)
+        
+        instruc5 = Label(instrucciones,
+                         text="5. Para el cifrado de hill, la clave es una palabra con tamaño cuadrado e invertible")
+        instruc5.grid(row=4, column=0, stick=W)
+        
+        instruc6 = Label(instrucciones,
+                         text="6. Para el cifrado de permutación, la clave es una palabra sin simbolos repetidos")
+        instruc6.grid(row=5, column=0, stick=W)
 
 
 
@@ -981,7 +1016,7 @@ class Criptoanalisis2(ttk.Frame):
             listaMono.heading("#0", text="Caracter")
             listaMono.column("Probabilidad", width=80)
             listaMono.heading("Probabilidad", text="Frecuencia")
-            listaMono.place(x=600, y=60)
+            listaMono.place(x=620, y=60)
             frec=[0.082, 0.015, 0.028, 0.043, 0.127, 0.022, 0.020, 0.061, 0.070, 0.002, 0.008, 0.040, 0.024, 0.067, 0.075, 0.019, 0.001, 0.060, 0.063, 0.091, 0.028, 0.010, 0.023, 0.001, 0.020, 0.001]
             letras = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             listaDuplas=list()
@@ -993,7 +1028,7 @@ class Criptoanalisis2(ttk.Frame):
 
             listaMono2 = ttk.Treeview(self, columns=("Recurrencia"), height=26)
             listaMono2.column("#0", width=80)
-            listaMono2.heading("#0", text="Caracter")
+            listaMono2.heading("#0", text="Monograma")
             listaMono2.column("Recurrencia", width=80)
             listaMono2.heading("Recurrencia", text="Repeticiones")
             listaMono2.place(x=800, y=60)
@@ -1022,7 +1057,7 @@ class Criptoanalisis2(ttk.Frame):
             listaTripla.heading("#0", text="Trigrama")
             listaTripla.column("Probabilidad", width=80)
             listaTripla.heading("Probabilidad", text="Frecuencia")
-            listaTripla.place(x=600, y=630)
+            listaTripla.place(x=620, y=630)
             trigramas = [('the', 0.0181), ('and', 0.0073), ('tha', 0.0033), ('ent', 0.0042), ('ing', 0.007), ('ion', 0.0042), ('tio', 0.0031),
                  ('for', 0.0034)]
             trigramas.sort(key = lambda x: x[1])
