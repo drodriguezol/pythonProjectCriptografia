@@ -137,11 +137,11 @@ class CriptoSistemas(ttk.Frame):
         global mainWindow
         mainWindow=main_window
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1200, height=500)
+        main_window.configure(width=1400, height=500)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
-        self.place(width=1200, height=500)
+        self.place(width=1400, height=500)
 
         opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
         opcionesCifrado.place(x=30,y=30)
@@ -164,10 +164,10 @@ class CriptoSistemas(ttk.Frame):
         cifrarFrame = LabelFrame(self, text="Cifrar")
         cifrarFrame.place(x=30, y=150)
 
-        ctClaro = ttk.Label(cifrarFrame, text="Texto")
+        ctClaro = Label(cifrarFrame, text="Texto")
         ctClaro.grid(row=0, sticky=W)
 
-        ctCifrado = ttk.Label(cifrarFrame, text="Resultado")
+        ctCifrado = Label(cifrarFrame, text="Resultado")
         ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
 
         texto=Text(cifrarFrame)
@@ -466,7 +466,7 @@ class CriptoSistemas(ttk.Frame):
         botonGenerarClave.grid(row=0,column=3)
 
         instrucciones = LabelFrame(self, text="Anotaciones")
-        instrucciones.place(x=600, y= 30)
+        instrucciones.place(x=700, y= 30)
 
         instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.")
         instruc1.grid(row=0, column=0, stick=W)
@@ -503,7 +503,7 @@ class CriptoSistemasImagen(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1070, height=750)
+        main_window.configure(width=1100, height=750,)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -521,35 +521,41 @@ class CriptoSistemasImagen(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
         self.combo.current(6)
 
-        labelClave = Label(self, text="Al cifrar, se generará automáticamente una clave y se guardará en el archivo key.npy dentro de la carpeta del proyecto.")
-        labelClave.place(x= 300, y=30)
-        labelCifrar = Label(self, text="La imagen resultante al cifrar se guardará en el proyecto como imagenCifrada.jpg")
-        labelCifrar.place(x= 300, y=53)
-
-        labelCifrar = Label(self, text="La imagen resultante al descifrar se guardará en el proyecto como imagen.jpg")
-        labelCifrar.place(x= 300, y=76)
+        labelInfo=LabelFrame(self,text="Información")
+        labelInfo.place(x=300,y=30)
+        labelClave = Label(labelInfo, text="Al cifrar, se generará automáticamente una clave y se guardará en el archivo key.npy dentro de la carpeta del proyecto.")
+        labelClave.grid(row=0, column=0,sticky=W)
+        labelCifrar = Label(labelInfo, text="La imagen resultante al cifrar se guardará en el proyecto como imagenCifrada.jpg")
+        labelCifrar.grid(row=1, column=0,sticky=W)
+        labelCifrar = Label(labelInfo, text="La imagen resultante al descifrar se guardará en el proyecto como imagen.jpg")
+        labelCifrar.grid(row=2, column=0,sticky=W)
 
         self.image1=""
-        imageLabel= Label(self,image=self.image1)
-        imageLabel.configure(width=400, height=400)
-        imageLabel.place(x=80, y=160)
+        imageLabelFrame= LabelFrame(self)
+        imageLabelFrame.place(x=80, y=160)
+        imageLabelFrame.configure(width=400, height=400)
+        imageLabel=Label(imageLabelFrame, image=self.image1)
+        imageLabel.place(anchor="center")
 
         self.image2=""
-        imageLabel2= Label(self,image=self.image2)
-        imageLabel2.configure(width=400, height=400)
-        imageLabel2.place(x=580, y=160)
+        imageLabelFrame2= LabelFrame(self)
+        imageLabelFrame2.place(x=580, y=160)
+        imageLabelFrame2.configure(width=400, height=400)
+        imageLabel2=Label(imageLabelFrame2, image=self.image2)
+        imageLabel2.place(anchor="center")
+
 
         botonesImagen = Label(self)
-        botonesImagen.place(x=30,y=600)
+        botonesImagen.place(x=200,y=620)
 
         for i in range(2):
             botonesImagen.columnconfigure((0,i), weight=1, pad=30)
         for i in range(2):
             botonesImagen.rowconfigure((0,i), weight=1, pad=10)
 
-        textoUrl=Text(botonesImagen)
-        textoUrl.configure(width=10,height=2)
-        textoUrl.grid(row=0,column=1)
+        textoUrl=Text(self)
+        textoUrl.configure(width=77,height=2)
+        textoUrl.place(x=200,y=580)
 
         def limpiar():
             imageLabel.configure(image="")
@@ -610,23 +616,22 @@ class CriptoSistemasImagen(ttk.Frame):
             
 
         botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5)
-        botonUrl.grid(row=0,column=0)
+        botonUrl.grid(row=1,column=0)
 
-
-        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde ruta", padx=5, pady=5)
-        botonCargar.grid(row=0,column=2)
+        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde la ruta espeficicada", padx=5, pady=5)
+        botonCargar.grid(row=1,column=1)
 
         botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5)
-        botonCifrar.grid(row=1,column=0)
+        botonCifrar.grid(row=2,column=0)
 
         botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5)
-        botonDescifrar.grid(row=1,column=1)
+        botonDescifrar.grid(row=2,column=1)
 
         botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5)
-        botonLimpiar.grid(row=1,column=2)
+        botonLimpiar.grid(row=2,column=2)
 
         botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5)
-        botonCargarUltima.grid(row=2,column=1)
+        botonCargarUltima.grid(row=1,column=2)
 
 
 
@@ -1242,11 +1247,12 @@ class Inicial(ttk.Frame):
         main_window.configure(width=500, height=500)
         self.place(width=500, height=500)
         self.style = ttk.Style()
-        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.style.configure("TCombobox", fieldbackground="white", bg="white")
         self.style.theme_use('clam')
 
         clasicoFrame = LabelFrame(self, text="Opciones de Cifrado", bg='#DCDAD5',padx=5, pady=5)
         clasicoFrame.place(x=20,y=20)
+
 
             #funciones para los botones
         def criptosistemas():
