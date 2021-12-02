@@ -7,7 +7,10 @@
 
 ```
 # Instalación:
+```
 $ pip install -r requirements.txt
+```
 # Clonar Repositorio
+```
 $ git clone https://github.com/drodriguezol/pythonProjectCriptografia.git
-
+```
