@@ -182,7 +182,7 @@ class CriptoSistemas(ttk.Frame):
         #funciones para los botones
         def cifrar():
             text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
-            password=clave.get("1.0","end-1c")
+            password=clave.get("1.0","end-1c").replace(" ","")
             boolPass=True
 
             if (not text.isalpha()) and not text.split(" ")==['']:
@@ -267,7 +267,7 @@ class CriptoSistemas(ttk.Frame):
                 if (not password.isalpha()):
                     messagebox.showinfo("Advertencia","Sólo se admiten letras como clave.")
                     main_window.deiconify()
-                elif (not int((len(password)**0.5) + 0.5) ** 2 == len(password)):
+                elif (not int((len(password)**0.5))**2 == len(password)):
                     messagebox.showinfo("Advertencia","El tamaño de la clave debe corresponder con un número cuadrado perfecto.")
                     main_window.deiconify()
                 else:
@@ -465,8 +465,8 @@ class CriptoSistemas(ttk.Frame):
         botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5)
         botonGenerarClave.grid(row=0,column=3)
 
-        instrucciones = LabelFrame(self, text="Instrucciones")
-        instrucciones.place(x=510, y= 30)
+        instrucciones = LabelFrame(self, text="Anotaciones")
+        instrucciones.place(x=600, y= 30)
 
         instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.")
         instruc1.grid(row=0, column=0, stick=W)
@@ -478,15 +478,15 @@ class CriptoSistemas(ttk.Frame):
         instruc3.grid(row=2, column=0, stick=W)
         
         instruc4 = Label(instrucciones,
-                         text="4. Para el cifrado de sustitución, la clave es un permutacion del abecedario usual usado")
+                         text="4. Para el cifrado de sustitución, la clave es un permutacion del abecedario usual usado.")
         instruc4.grid(row=3, column=0, stick=W)
         
         instruc5 = Label(instrucciones,
-                         text="5. Para el cifrado de hill, la clave es una palabra con tamaño cuadrado e invertible")
+                         text="5. Para el cifrado de hill, la clave es una palabra con tamaño cuadrado e invertible.")
         instruc5.grid(row=4, column=0, stick=W)
         
         instruc6 = Label(instrucciones,
-                         text="6. Para el cifrado de permutación, la clave es una palabra sin simbolos repetidos")
+                         text="6. Para el cifrado de permutación, la clave es una palabra sin simbolos repetidos.")
         instruc6.grid(row=5, column=0, stick=W)
 
 
@@ -498,11 +498,12 @@ class CriptoSistemas(ttk.Frame):
             self.combo.current(6)
 
 
+
 class CriptoSistemasImagen(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1200, height=1200)
+        main_window.configure(width=1070, height=750)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -518,23 +519,118 @@ class CriptoSistemasImagen(ttk.Frame):
         self.combo.grid(row=0, column=1)
         self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación", "Hill para Imagen"]
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
+        self.combo.current(6)
 
-        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
-        claveLabel.grid(row=1, column=0)
+        labelClave = Label(self, text="Al cifrar, se generará automáticamente una clave y se guardará en el archivo key.npy dentro de la carpeta del proyecto.")
+        labelClave.place(x= 300, y=30)
+        labelCifrar = Label(self, text="La imagen resultante al cifrar se guardará en el proyecto como imagenCifrada.jpg")
+        labelCifrar.place(x= 300, y=53)
 
-        clave=Text(opcionesCifrado)
-        clave.grid(row=1,column=1, sticky=W)
-        clave.configure(height=1,width=16, padx=5, pady=5)
+        labelCifrar = Label(self, text="La imagen resultante al descifrar se guardará en el proyecto como imagen.jpg")
+        labelCifrar.place(x= 300, y=76)
+
+        self.image1=""
+        imageLabel= Label(self,image=self.image1)
+        imageLabel.configure(width=400, height=400)
+        imageLabel.place(x=80, y=160)
+
+        self.image2=""
+        imageLabel2= Label(self,image=self.image2)
+        imageLabel2.configure(width=400, height=400)
+        imageLabel2.place(x=580, y=160)
+
+        botonesImagen = Label(self)
+        botonesImagen.place(x=30,y=600)
+
+        for i in range(2):
+            botonesImagen.columnconfigure((0,i), weight=1, pad=30)
+        for i in range(2):
+            botonesImagen.rowconfigure((0,i), weight=1, pad=10)
+
+        textoUrl=Text(botonesImagen)
+        textoUrl.configure(width=10,height=2)
+        textoUrl.grid(row=0,column=1)
+
+        def limpiar():
+            imageLabel.configure(image="")
+            imageLabel2.configure(image="")
+            textoUrl.delete("1.0", END)
+        
+        def imagenUrl():
+            url=textoUrl.get("1.0","end-1c")
+            try:
+                loadImage(url)
+                self.image1=ImageTk.PhotoImage(file='imagen.jpg')
+                imageLabel.configure(image=self.image1)
+            except:
+                messagebox.showinfo("Advertencia","No se ha proporcionado una Url correcta o no se puede acceder a ella.")
+                main_window.deiconify()
+
+        def imagenCargar():
+            ruta=textoUrl.get("1.0","end-1c")
+            loadImage3(ruta)
+            try:
+                imageLabel.configure(image="")
+                self.image1=ImageTk.PhotoImage(file='imagen.jpg')
+                imageLabel.configure(image=self.image1)
+            except:
+                messagebox.showinfo("Advertencia","No se puede acceder a la ruta especificada o el archivo no existe.")
+                main_window.deiconify()                
+
+        def cifrar():
+            try:
+                if not(imageLabel.cget("image")==""):
+                    imageLabel2.configure(image="")
+                    hillImagenCifrar()
+                    self.image2=ImageTk.PhotoImage(file='imagenCifrada.jpg')
+                    imageLabel2.configure(image=self.image2)
+            except:
+                messagebox.showinfo("Advertencia","Hay un error con la imagen.")
+                main_window.deiconify()   
+        
+        def descifrar():
+            try:
+                if not(imageLabel.cget("image")==""):
+                    imageLabel2.configure(image="")
+                    hillImagenDescifrar()
+                    self.image2=ImageTk.PhotoImage(file='imagen.jpg')
+                    imageLabel2.configure(image=self.image2)
+            except:
+                messagebox.showinfo("Advertencia","Hay un error con la imagen o la clave no existe.")
+                main_window.deiconify() 
+        
+        def cargarUltima():
+            try:
+                limpiar()
+                self.image1=ImageTk.PhotoImage(file='imagenCifrada.jpg')
+                imageLabel.configure(image=self.image1)
+            except:
+                messagebox.showinfo("Advertencia","No hay ninguna imagen cifrada.")
+                main_window.deiconify()
+            
+
+        botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5)
+        botonUrl.grid(row=0,column=0)
+
+
+        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde ruta", padx=5, pady=5)
+        botonCargar.grid(row=0,column=2)
+
+        botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar.grid(row=1,column=0)
+
+        botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar.grid(row=1,column=1)
+
+        botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar.grid(row=1,column=2)
+
+        botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5)
+        botonCargarUltima.grid(row=2,column=1)
 
 
 
 
-        imageLoad=loadImage("https://3.bp.blogspot.com/-Tyz_OhUYNfk/WK4_z7fUh_I/AAAAAAAAUG8/IC3nN-vNThsfbNGm18VD0NrdWkDALMO7wCLcB/w680/como%2Bdibujar%2Bpato%2B0%2B%25281%2529.gif")
-        self.python_image=ImageTk.PhotoImage(file='imagen.jpg')
-        #im = Image.open(BytesIO(imageLoad))
-        #imageTk= _photo_image('imagen.jpg')
-        imageLabel= Label(self,image=self.python_image)
-        imageLabel.place(x=200, y=120)
 
 
 
@@ -567,7 +663,7 @@ class Criptoanalisis2(ttk.Frame):
         global window
         window = main_window
         main_window.title("Criptoanálisis")
-        main_window.configure(width=1400, height=950)
+        main_window.configure(width=780, height=800)
         self.place(width=1400, height=950)
         self.style = ttk.Style()
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -575,7 +671,7 @@ class Criptoanalisis2(ttk.Frame):
 
         self.combo = ttk.Combobox(self,state='readonly')
         self.combo.place(x=30, y=30)
-        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación"]
+        self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill"]
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
     def seleccion(self, event):
@@ -708,6 +804,8 @@ class Criptoanalisis2(ttk.Frame):
 
         elif (self.combo.get()=="Sustitución"):
             self = Criptoanalisis2(window)
+            window.configure(width=1400, height=950)
+            self.place(width=1400, height=950)
             self.combo.current(3)         
             analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
             analisis.place(x=30, y=60)
@@ -733,9 +831,6 @@ class Criptoanalisis2(ttk.Frame):
 
             def ingresarFrecuencias():
                 text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
-                if(text==""):
-                    print("aqui")
-
                 listaMonogramas = frecuenciaMonogramas(text)
                 listaMono2.delete(*listaMono2.get_children())
                 for i in range(len(listaMonogramas)):
@@ -1070,6 +1165,73 @@ class Criptoanalisis2(ttk.Frame):
             listaTripla2.column("Recurrencia", width=80)
             listaTripla2.heading("Recurrencia", text="Repeticiones")
             listaTripla2.place(x=800, y=630)
+
+        elif (self.combo.get()=="Hill"):
+            self = Criptoanalisis2(window)
+            self.combo.current(4)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis.place(x=30, y=60)
+
+            textoCifrado=Label(analisis, text="Texto plano")
+            textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
+
+            ctexto= Text(analisis)
+            ctexto.grid(row=1,column=0, padx=4, pady=2)
+            ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
+            
+            textoPlano=Label(analisis, text="Texto cifrado")
+            textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
+            
+            ptexto= Text(analisis)
+            ptexto.grid(row=1,column=1, padx=4, pady=2)
+            ptexto.configure(height=26,width=40, bg="light cyan", foreground="#000000")
+
+            def analizar():
+                text=ctexto.get("1.0","end-1c").replace(" ","").replace("\n","")
+                text2=ptexto.get("1.0","end-1c").replace(" ","").replace("\n","")
+                if (not text.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en ambos textos.")
+                    window.deiconify()
+                elif (not text2.isalpha()):
+                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en ambos texto.")
+                    window.deiconify()
+                
+                else:   
+                    textClave.configure(state='normal')
+                    textClave.delete("1.0", END)
+                    textClave.configure(state='disabled')
+                    try:
+                        claves = CriptoanalisisHill(text,text2)
+                        if(claves==[]):
+                            messagebox.showinfo("Advertencia", "A partir de los textos no se puede encontrar una clave.")
+                            window.deiconify()
+                        for i in claves:
+                            textClave.configure(state='normal')
+                            textClave.insert(INSERT, "Una posible clave es "+ i[0] + " que corresponde a una matriz de dimensión m = "+str(i[1])+".\n")
+                            textClave.configure(state='disabled')
+                    except:
+                        messagebox.showinfo("Advertencia", "A partir de los textos no se puede encontrar una clave.")
+                        window.deiconify()
+                        
+
+
+            botonesFrame = Frame(analisis)
+            botonesFrame.grid(row=2,column=0, padx=5, pady=20)
+
+            labelPosibleClave = Label(analisis, text="Posibles Claves: ")
+            labelPosibleClave.grid(row=3,column=0,padx=20,pady=5, sticky=W)
+
+            labelEspacio = Label(analisis, text="")
+            labelEspacio.grid(row=4,column=0,padx=20,pady=5, sticky=W)
+            labelEspacio.configure(width=1,height=10)
+
+
+            textClave = Text(self)
+            textClave.place(x=40,y=650)
+            textClave.configure(height=6,width=81, foreground="#000000", background="#FFFFFF", state="disabled")
+
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis.grid(row=0,column=0)
 
 
 class Inicial(ttk.Frame):
