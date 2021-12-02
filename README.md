@@ -1,13 +1,19 @@
 # PROYECTO CRIPTOSISTEMAS Y CRIPTOANALISIS CON PYTHON
 ```diff
-- autores : Juan Daniel Gomez Rios. Daniel Ricardo Rodriguez
+- Autores : Juan Daniel Gomez Rios. Daniel Ricardo Rodriguez
 + Este proyecto Incluye:
-+ los Criptosistemas: Desplazamiento,Afin, Sustitución,Vigenere, Hill y Permutación 
-+ Criptoanalisis(hackeo) de: Desplazamiento,Afin, Sustitución,Vigenere, Hill y Hill con Imagenes
++ los Criptosistemas: Desplazamiento, Afin, Sustitución, Vigenere, Hill, Permutación y Hill para imágenes.
++ Criptoanalisis de: Desplazamiento, Afin, Sustitución, Vigenere y Hill.
++ Este Proyecto fue diseñado en windows sirve para mac pero con algunas alteraciones visuales de la interfaz
++ Si tiene macOs asegurese de que al momento de ejecutar la aplicación tenga el tema/apariencia de su computador en light
 
 ```
-# Instalacion:
+# Instalación:
+```
 $ pip install -r requirements.txt
+pip install tk
+```
 # Clonar Repositorio
- python -m pip install git+https://github.com/drodriguezol/pythonProjectCriptografia.git
-
+```
+$ git clone https://github.com/drodriguezol/pythonProjectCriptografia.git
+```
