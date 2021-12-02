@@ -211,7 +211,7 @@ def permutacionCifrar(msg,key):
         for j in range(col):
             curr_idx = key.index(key_lst[j])
             cipher+=''.join([row[curr_idx]])
-    return cipher
+    return cipher.replace('_',"")
   
 # Decryption
 def permutacionDescifrar(cipher,key):
@@ -244,7 +244,7 @@ def permutacionDescifrar(cipher,key):
             curr_idx = key2.index(key_lst[j])
             decipher+=''.join([row[curr_idx]])
  
-    return decipher
+    return decipher.replace('_',"")
 
 
 
