@@ -5,6 +5,7 @@
 + los Criptosistemas: Desplazamiento, Afin, Sustitución, Vigenere, Hill, Permutación y Hill para imágenes.
 + Criptoanalisis de: Desplazamiento, Afin, Sustitución, Vigenere y Hill.
 + Este Proyecto fue diseñado en windows sirve para mac pero con algunas alteraciones visuales de la interfaz
++ Si tiene macOs asegurese de que al momento de ejecutar la aplicación tenga el tema/apariencia de su computador en light
 
 ```
 # Instalación:
