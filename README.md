@@ -9,5 +9,5 @@
 # Instalación:
 $ pip install -r requirements.txt
 # Clonar Repositorio
- python -m pip install git+https://github.com/drodriguezol/pythonProjectCriptografia.git
+$ git clone https://github.com/drodriguezol/pythonProjectCriptografia.git
 
