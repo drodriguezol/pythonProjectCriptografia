@@ -365,7 +365,7 @@ class CriptoSistemas(ttk.Frame):
                     resultado.configure(state='normal')
                     resultado.delete("1.0", END)
                     resultado.insert(INSERT, sustitucionDescifrar(text,password))
-                    if resultado.get()=="":
+                    if resultado.get("1.0", "end-1c")=="":
                         messagebox.showinfo("Hay un error con la clave. Verifique que tiene todas las letras del alfabeto sin repetirse.")
                         main_window.deiconify()
                     resultado.configure(state='disabled')
@@ -535,14 +535,14 @@ class CriptoSistemasImagen(ttk.Frame):
         imageLabelFrame.place(x=80, y=160)
         imageLabelFrame.configure(width=400, height=400)
         imageLabel=Label(imageLabelFrame, image=self.image1)
-        imageLabel.place(anchor="center")
+        imageLabel.place(x=200,y=200, anchor="center")
 
         self.image2=""
         imageLabelFrame2= LabelFrame(self)
         imageLabelFrame2.place(x=580, y=160)
         imageLabelFrame2.configure(width=400, height=400)
         imageLabel2=Label(imageLabelFrame2, image=self.image2)
-        imageLabel2.place(anchor="center")
+        imageLabel2.place(x=200,y=200, anchor="center")
 
 
         botonesImagen = Label(self)
