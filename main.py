@@ -882,11 +882,20 @@ class CriptoBloqueTexto(ttk.Frame):
         self.combo["values"] = ["DES", "3-DES", "AES", "S-DES"]
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
+        modoLabel = Label(opcionesCifrado, text="Modo: ", padx=5, pady=5)
+        modoLabel.grid(row=1, column=0)
+
+        self.modo = ttk.Combobox(opcionesCifrado,state='readonly')
+        self.modo.grid(row=1, column=1)
+        self.modo["values"] = ["ECB", "CBC", "CFB", "OFB"]
+        self.modo.bind("<<ComboboxSelected>>", self.seleccion)
+        self.modo.current(0)
+
         claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
-        claveLabel.grid(row=1, column=0)
+        claveLabel.grid(row=2, column=0)
 
         clave=Text(opcionesCifrado)
-        clave.grid(row=1,column=1, sticky=W)
+        clave.grid(row=2,column=1, sticky=W)
         clave.configure(height=1,width=16, padx=5, pady=5)
 
         cifrarFrame = LabelFrame(self, text="Cifrar")
@@ -909,41 +918,32 @@ class CriptoBloqueTexto(ttk.Frame):
 
         #funciones para los botones
         def cifrar():
-            text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
+            text=texto.get("1.0","end-1c")
             password=clave.get("1.0","end-1c").replace(" ","")
-            boolPass=True
-
-            if (not text.isalpha()) and not text.split(" ")==['']:
-                    messagebox.showinfo("Advertencia","Sólo se admiten letras en el texto.")
-                    main_window.deiconify()
-
-            elif(self.combo.get())=='Desplazamiento': 
-                try:
-                    password=(int(password))
-                    if (password<0):
-                        boolPass=False
-                except:
-                    boolPass=False
-                if(not boolPass):
-                    messagebox.showinfo("Advertencia","Sólo se admiten números naturales como clave.")
-                    main_window.deiconify()
-                else:
-                    resultado.configure(state='normal')
-                    resultado.delete("1.0", END)
-                    resultado.insert(INSERT, desplazamientoCifrar(text,password))
-                    resultado.configure(state='disabled')
+            try: 
+                resultado.configure(state='normal')
+                resultado.delete("1.0", END)
+                resultado.insert(INSERT, SdesCifrar(text,password,self.modo.get()))
+                resultado.configure(state='disabled')
+            except:           
+                messagebox.showinfo("Advertencia","Hay un error con el texto o la clave.")
+                main_window.deiconify()
                 
                            
-
         def descifrar():
-            text=texto.get("1.0","end-1c").replace(" ","").replace("\n","")
+            text=texto.get("1.0","end-1c").split(" ")
             password=clave.get("1.0","end-1c")
-            boolPass=True
-            if (not text.isalpha()) and not text.split(" ")==['']:
-                    messagebox.showinfo("Advertencia", "Sólo se admiten letras en el texto.")
-                    main_window.deiconify()
-
-            
+            try:    
+                resultado.configure(state='normal')
+                resultado.delete("1.0", END)
+                resultado.insert(INSERT, SdesDescifrar(text,password,self.modo.get()))
+                resultado.configure(state='disabled')
+            except:
+                if(self.modo.get()!='ECB'):
+                    messagebox.showinfo("Advertencia","Hay un error con el texto, la clave o el vector inicial. Asegúrese de que el valor del vector inicial está guardado en el archivo ivk.txt")
+                else:
+                    messagebox.showinfo("Advertencia","Hay un error con el texto o la clave.")
+                main_window.deiconify()
 
         def copiar_al_portapapeles():
             self.clipboard_clear()
@@ -957,7 +957,6 @@ class CriptoBloqueTexto(ttk.Frame):
             if ((self.combo.get()) == 'Desplazamiento'):
                 clave.delete("1.0", END)
                 clave.insert(1.0,"7")
-
    
         def limpiar():
             resultado.configure(state='normal')
@@ -998,8 +997,16 @@ class CriptoBloqueTexto(ttk.Frame):
         instrucciones = LabelFrame(self, text="Anotaciones")
         instrucciones.place(x=700, y= 30)
 
-        instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.")
+        instruc1=Label(instrucciones, text="1. Si va a proporcionar una clave, debe corresponder a una cadena de 10 dígitos formados por 0's y 1's.")
         instruc1.grid(row=0, column=0, stick=W)
+        instruc1=Label(instrucciones, text="2. Si no se proporciona una clave, se generará automáticamente.")
+        instruc1.grid(row=1, column=0, stick=W)
+        instruc1=Label(instrucciones, text="3. La clave usada en el cifrado se guardará en el archivo key.txt.")
+        instruc1.grid(row=2, column=0, stick=W)
+        instruc1=Label(instrucciones, text="4. En los modos CBC, CBF y OFB el vector inicial se generará automáticamente y se guardará en el archivo ivk.txt")
+        instruc1.grid(row=3, column=0, stick=W)
+        instruc1=Label(instrucciones, text="5. Al momento de desencriptar en los modos CBC, CBF y OFB el vector inicial debe estar en el archivo ivk.txt")
+        instruc1.grid(row=4, column=0, stick=W)
 
     def seleccion(self, event):
         index=0
@@ -1641,6 +1648,8 @@ class Inicial(ttk.Frame):
 
         botonCriptoBloque =Button(bloqueFrame, command=criptoBloque, text="CriptoSistemas",padx=5, pady=5)
         botonCriptoBloque.grid(row=0,column=0)
+
+
 
 #Inicio de la aplicación
 ventana= tk.Tk()
