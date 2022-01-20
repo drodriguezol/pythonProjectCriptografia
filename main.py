@@ -9,7 +9,10 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import ImageTk,Image
 from io import BytesIO
-
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+from matplotlib.figure import Figure
 from Cypher import*
 from Block import*
 #DANIELCRACK
@@ -101,7 +104,6 @@ def frecuenciaTrigramas(text):
       a=text[i]+text[i+1]+text[i+2]
       lista_de_trigramas_text.append(a) 
      except:
-        #print(lista_de_trigramas_text)
         idontusethis=0
   #LISTA DE FRECUENCIA
   trigrams=list(set(lista_de_trigramas_text))
@@ -1601,19 +1603,16 @@ class CriptoBloqueTexto(ttk.Frame):
             if (self.combo.get()=="AES"):
                 labelSize.place(x=250, y=67)
 
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
-from matplotlib.figure import Figure
+
 class CriptoGamma(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Gamma Pentagonal")
-        main_window.configure(width=900, height=750)
+        main_window.configure(width=1200, height=750)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
-        self.place(width=900, height=750)
+        self.place(width=3000, height=3000)
 
         opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
         opcionesCifrado.place(x=30,y=30)
@@ -1713,7 +1712,7 @@ class CriptoGamma(ttk.Frame):
         botonGenerar.grid(row=0,column=4)
 
         cifrarFrame = LabelFrame(self, text="Cifrar")
-        cifrarFrame.place(x=300, y=30)
+        cifrarFrame.place(x=400, y=30)
 
         ctClaro = Label(cifrarFrame, text="Texto")
         ctClaro.grid(row=0, sticky=W)
@@ -1786,7 +1785,7 @@ class CriptoGamma(ttk.Frame):
         
 
         def graficarGrafo(x, y):
-            n=5
+            n=10
             vect=None
             if(self.combo.get()=='Grafo 2'):
                 vect=grafo2(x, y, n)
@@ -1896,7 +1895,7 @@ class CriptoGamma(ttk.Frame):
 
 
         def obtenerVector(x,y):
-            n=5
+            n=10
             if self.combo.get() == 'Grafo 1':
                 edges = set()
                 curr = (x, y)
@@ -1948,10 +1947,10 @@ class CriptoGamma(ttk.Frame):
             return count
 
         def aumentarAlph(x,y):
-            pathh = obtenerVector(x, y)
+            vector = obtenerVector(x, y)
             for i in range(10):
                 for j in range(20):
-                    n = contador(i,j, pathh) # n es lo que se desplaza
+                    n = contador(i,j, vector) # n es lo que se desplaza
                     matrixAlph[i][j] = (matrixAlph[i][j]+n)%26
 
 
@@ -1969,10 +1968,8 @@ class CriptoGamma(ttk.Frame):
                 while k > 0:
                     for i in range(10):
                         for j in range(20):
-                            print(i,j, k)
                             if(chr(matrixAlph[i][j]+97)==text[len(text)-k]):
                                 cifrado+=('('+str(i)+','+str(j)+');')
-                                print(cifrado)
                                 k-=1
                             if(k==0):
                                 break
