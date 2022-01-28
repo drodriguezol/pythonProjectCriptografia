@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import tkinter
 from cgitb import text
 from os import stat
 from tkinter import ttk
@@ -9,10 +10,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import ImageTk,Image
 from io import BytesIO
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
-from matplotlib.figure import Figure
+
 from Cypher import*
 from Block import*
 #DANIELCRACK
@@ -104,6 +102,7 @@ def frecuenciaTrigramas(text):
       a=text[i]+text[i+1]+text[i+2]
       lista_de_trigramas_text.append(a) 
      except:
+        #print(lista_de_trigramas_text)
         idontusethis=0
   #LISTA DE FRECUENCIA
   trigrams=list(set(lista_de_trigramas_text))
@@ -134,37 +133,42 @@ class CriptoSistemas(ttk.Frame):
         global mainWindow
         mainWindow=main_window
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1400, height=500)
+        main_window.configure(width=1400, height=500,bg="black")
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.image1 = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrame = LabelFrame(self)
+        imageLabelFrame.place(x=0, y=0)
+        imageLabelFrame.configure(width=1400, height=1000)
+        imageLabel = Label(imageLabelFrame, image=self.image1)
+        imageLabel.place(x=200, y=200, anchor="center")
         self.place(width=1400, height=500)
 
-        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
         opcionesCifrado.place(x=30,y=30)
 
-        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5)
+        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg='black',fg='white')
         cifradorLabel.grid(row=0, column=0)
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
         self.combo.grid(row=0, column=1)
         self.combo["values"] = ["Desplazamiento", "Afín", "Vigenere", "Sustitución","Hill","Permutación", "Hill para Imagen"]
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
-
-        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
+        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5,bg="black",fg="white")
         claveLabel.grid(row=1, column=0)
 
         clave=Text(opcionesCifrado)
         clave.grid(row=1,column=1, sticky=W)
         clave.configure(height=1,width=16, padx=5, pady=5)
 
-        cifrarFrame = LabelFrame(self, text="Cifrar")
-        cifrarFrame.place(x=30, y=150)
+        cifrarFrame = LabelFrame(self, text="Cifrar",bg='black',fg='white')
+        cifrarFrame.place(x=30, y=180)
 
-        ctClaro = Label(cifrarFrame, text="Texto")
+        ctClaro = Label(cifrarFrame, text="Texto",bg='black',fg='white',font=('Arial',15))
         ctClaro.grid(row=0, sticky=W)
 
-        ctCifrado = Label(cifrarFrame, text="Resultado")
+        ctCifrado = Label(cifrarFrame, text="Resultado",bg='black',fg='white')
         ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
 
         texto=Text(cifrarFrame)
@@ -432,10 +436,10 @@ class CriptoSistemas(ttk.Frame):
             resultado.configure(state='disabled')
             texto.delete("1.0", END)
 
-        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame.grid(row=2, column=0)
 
-        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame2.grid(row=2, column=1)
         
         #espaciado entre botones
@@ -444,46 +448,49 @@ class CriptoSistemas(ttk.Frame):
         for i in range(3):
             botonesFrame.columnconfigure((0,i), weight=1, pad=25)
 
-        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonCifrar.grid(row=0,column=0)
 
-        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonDescifrar.grid(row=0,column=1)  
 
-        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5)
+        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonPegar.grid(row=0,column=2)       
 
-        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonLimpiar.grid(row=0,column=0)
 
-        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
+        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5,
+                            font=('Comic Sans MS', 15, 'bold'))
         botonCopiar.grid(row=0,column=1)
         
-        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5)
+        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonGenerarClave.grid(row=0,column=3)
 
-        instrucciones = LabelFrame(self, text="Anotaciones")
+        instrucciones = LabelFrame(self, text="Anotaciones",bg="black",fg='white')
         instrucciones.place(x=700, y= 30)
 
-        instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.")
+        instruc1=Label(instrucciones, text="1. Para el cifrado de desplazamiento la clave debe ser un número natural.",bg="black",fg='white')
         instruc1.grid(row=0, column=0, stick=W)
 
-        instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados por una coma.")
+        instruc2=Label(instrucciones, text="2. Para el cifrado afín, la clave debe componerse de dos números naturales separados "
+                                           "por una coma.",bg="black",fg='white')
         instruc2.grid(row=1, column=0, stick=W)
 
-        instruc3=Label(instrucciones, text="3. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente de letras.")
+        instruc3=Label(instrucciones, text="3. Para el cifrado Vigenere, la clave debe componerse de una cadena únicamente "
+                                           "de letras.",bg="black",fg='white')
         instruc3.grid(row=2, column=0, stick=W)
         
         instruc4 = Label(instrucciones,
-                         text="4. Para el cifrado de sustitución, la clave es un permutacion del abecedario usual usado.")
+                         text="4. Para el cifrado de sustitución, la clave es un permutacion del abecedario usual usado.",bg="black",fg='white')
         instruc4.grid(row=3, column=0, stick=W)
         
         instruc5 = Label(instrucciones,
-                         text="5. Para el cifrado de hill, la clave es una palabra con tamaño cuadrado e invertible.")
+                         text="5. Para el cifrado de hill, la clave es una palabra con tamaño cuadrado e invertible.",bg="black",fg='white')
         instruc5.grid(row=4, column=0, stick=W)
         
         instruc6 = Label(instrucciones,
-                         text="6. Para el cifrado de permutación, la clave es una palabra sin simbolos repetidos.")
+                         text="6. Para el cifrado de permutación, la clave es una palabra sin simbolos repetidos.",bg="black",fg='white')
         instruc6.grid(row=5, column=0, stick=W)
 
 
@@ -500,16 +507,22 @@ class CriptoSistemasImagen(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Criptosistemas Clásicos")
-        main_window.configure(width=1100, height=750,)
+        main_window.configure(width=1200, height=750,bg='black')
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.place(width=1200, height=1200)
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=1200, height=1000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
 
-        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg='black',fg='white')
         opcionesCifrado.place(x=30,y=30)
 
-        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5)
+        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg='black',fg='white')
         cifradorLabel.grid(row=0, column=0)
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -518,13 +531,16 @@ class CriptoSistemasImagen(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
         self.combo.current(6)
 
-        labelInfo=LabelFrame(self,text="Información")
-        labelInfo.place(x=300,y=30)
-        labelClave = Label(labelInfo, text="Al cifrar, se generará automáticamente una clave y se guardará en el archivo key.npy dentro de la carpeta del proyecto.")
+        labelInfo=LabelFrame(self,text="Información",bg='black',fg='white')
+        labelInfo.place(x=320,y=30)
+        labelClave = Label(labelInfo, text="Al cifrar, se generará automáticamente una clave y se guardará en el archivo"
+                                           " key.npy dentro de la carpeta del proyecto.",bg="black",fg='white')
         labelClave.grid(row=0, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="La imagen resultante al cifrar se guardará en el proyecto como imagenCifrada.jpg")
+        labelCifrar = Label(labelInfo, text="La imagen resultante al cifrar se guardará en el proyecto como "
+                                            "imagenCifrada.jpg",bg="black",fg='white')
         labelCifrar.grid(row=1, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="La imagen resultante al descifrar se guardará en el proyecto como imagen.jpg")
+        labelCifrar = Label(labelInfo, text="La imagen resultante al descifrar se guardará en el proyecto como"
+                                            " imagen.jpg",bg="black",fg='white')
         labelCifrar.grid(row=2, column=0,sticky=W)
 
         self.image1=""
@@ -542,7 +558,7 @@ class CriptoSistemasImagen(ttk.Frame):
         imageLabel2.place(x=200,y=200, anchor="center")
 
 
-        botonesImagen = Label(self)
+        botonesImagen = Label(self,bg="black")
         botonesImagen.place(x=200,y=620)
 
         for i in range(2):
@@ -612,22 +628,24 @@ class CriptoSistemasImagen(ttk.Frame):
                 main_window.deiconify()
             
 
-        botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5)
+        botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5
+                         ,font=('Comic Sans MS', 15, 'bold'))
         botonUrl.grid(row=1,column=0)
 
-        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde la ruta espeficicada", padx=5, pady=5)
+        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde la ruta espeficicada",
+                            padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonCargar.grid(row=1,column=1)
 
-        botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonCifrar.grid(row=2,column=0)
 
-        botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonDescifrar.grid(row=2,column=1)
 
-        botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonLimpiar.grid(row=2,column=2)
 
-        botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5)
+        botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'))
         botonCargarUltima.grid(row=1,column=2)
 
 
@@ -658,11 +676,17 @@ class Criptoanalisis(ttk.Frame):
         global window
         window = main_window
         main_window.title("Criptoanálisis")
-        main_window.configure(width=780, height=800)
+        main_window.configure(width=780, height=800,bg="black")
         self.place(width=1400, height=950)
         self.style = ttk.Style()
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.style.theme_use('clam')
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
 
         self.combo = ttk.Combobox(self,state='readonly')
         self.combo.place(x=30, y=30)
@@ -673,17 +697,17 @@ class Criptoanalisis(ttk.Frame):
         if (self.combo.get()=="Desplazamiento"):
             self = Criptoanalisis(window)
             self.combo.current(0)
-            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5,bg="black",fg="white")
             analisis.place(x=30, y=60)
 
-            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado=Label(analisis, text="Texto cifrado",bg="black",fg="white")
             textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
             ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
             
-            textoPlano=Label(analisis, text="Posibles Claves")
+            textoPlano=Label(analisis, text="Posibles Claves",bg="black",fg="white")
             textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
@@ -703,26 +727,26 @@ class Criptoanalisis(ttk.Frame):
                         ptexto.insert(INSERT, i+"\n")
                     ptexto.configure(state='disabled')
 
-            botonesFrame = Frame(analisis)
+            botonesFrame = Frame(analisis,bg="black")
             botonesFrame.grid(row=10,column=0, padx=5, pady=20)
 
-            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.grid(row=4,column=0)
         
         elif (self.combo.get()=="Afín"):
             self = Criptoanalisis(window)
             self.combo.current(1)
-            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5,bg="black",fg="white")
             analisis.place(x=30, y=60)
 
-            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado=Label(analisis, text="Texto cifrado",bg="black",fg="white")
             textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
             ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
             
-            textoPlano=Label(analisis, text="Posibles Claves")
+            textoPlano=Label(analisis, text="Posibles Claves",bg="black",fg="white")
             textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
@@ -742,26 +766,26 @@ class Criptoanalisis(ttk.Frame):
                         ptexto.insert(INSERT, i+"\n")
                     ptexto.configure(state='disabled')
 
-            botonesFrame = Frame(analisis)
+            botonesFrame = Frame(analisis,bg="black")
             botonesFrame.grid(row=10,column=0, padx=5, pady=20)
 
-            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.grid(row=4,column=0)
 
         elif (self.combo.get()=="Vigenere"):
             self = Criptoanalisis(window)
             self.combo.current(2)
-            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5,bg="black",fg="white")
             analisis.place(x=30, y=60)
 
-            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado=Label(analisis, text="Texto cifrado",bg="black",fg="white")
             textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
             ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
             
-            textoPlano=Label(analisis, text="Posible descifrado")
+            textoPlano=Label(analisis, text="Posible descifrado",bg="black",fg="white")
             textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
@@ -784,17 +808,17 @@ class Criptoanalisis(ttk.Frame):
                     textClave.insert(INSERT, password.upper())
                     textClave.configure(state='disabled')
 
-            botonesFrame = Frame(analisis)
+            botonesFrame = Frame(analisis,bg="black")
             botonesFrame.grid(row=2,column=0, padx=5, pady=20)
 
-            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ")
+            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ",bg="black",fg="white")
             labelPosibleClave.grid(row=0,column=1,padx=20,pady=5)
 
             textClave = Text(botonesFrame)
             textClave.grid(row=0,column=2, padx=4, pady=5)
             textClave.configure(height=1,width=10, foreground="#000000", background="#FFFFFF", state="disabled")
 
-            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.grid(row=0,column=0)
 
         elif (self.combo.get()=="Sustitución"):
@@ -802,20 +826,20 @@ class Criptoanalisis(ttk.Frame):
             window.configure(width=1400, height=950)
             self.place(width=1400, height=950)
             self.combo.current(3)         
-            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5,bg="black",fg="white")
             analisis.place(x=30, y=60)
 
-            textoCifrado=Label(analisis, text="Texto cifrado")
+            textoCifrado=Label(analisis, text="Texto cifrado",bg="black",fg="white")
             textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
             ctexto.configure(height=19,width=40, bg="light yellow", foreground="#000000")
 
-            botonesFrame = Frame(analisis)
+            botonesFrame = Frame(analisis,bg="black")
             botonesFrame.grid(row=2,column=0, padx=5, pady=20)
 
-            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ")
+            labelPosibleClave = Label(botonesFrame, text="Posible Clave: ",bg="black",fg="white")
             labelPosibleClave.grid(row=1,column=0,padx=10,pady=5)
 
             textClave = Text(botonesFrame)
@@ -842,7 +866,7 @@ class Criptoanalisis(ttk.Frame):
                     listaTripla2.insert("",END,text=listaTrigramas[i][0], values=(listaTrigramas[i][1]))
 
                 
-            botonAnalisis =Button(botonesFrame, command=ingresarFrecuencias, text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(botonesFrame, command=ingresarFrecuencias, text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.grid(row=0,column=0)
 
             def descifrar():
@@ -876,10 +900,10 @@ class Criptoanalisis(ttk.Frame):
                     ptexto.insert(INSERT, sustitucionDescifrar(text,password))
                     ptexto.configure(state='disabled')               
 
-            botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
+            botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonDescifrar.grid(row=0,column=1)
             
-            textoPlano=Label(analisis, text="Posible descifrado")
+            textoPlano=Label(analisis, text="Posible descifrado",bg="black",fg="white")
             textoPlano.grid(row=3,column=0, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
@@ -1098,7 +1122,7 @@ class Criptoanalisis(ttk.Frame):
             comboZ["values"] = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
             comboZ.current(25)
 
-            botonAnalisis =Button(self, command="", text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(self, command="", text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.place(x=500,y=1000)
 
             listaMono = ttk.Treeview(self, columns=("Probabilidad"), height=26)
@@ -1164,17 +1188,17 @@ class Criptoanalisis(ttk.Frame):
         elif (self.combo.get()=="Hill"):
             self = Criptoanalisis(window)
             self.combo.current(4)
-            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5)
+            analisis = LabelFrame(self, text="Análisis", padx=5, pady=5,bg="black",fg="white")
             analisis.place(x=30, y=60)
 
-            textoCifrado=Label(analisis, text="Texto plano")
+            textoCifrado=Label(analisis, text="Texto plano",bg="black",fg="white")
             textoCifrado.grid(row=0,column =0, padx=5, pady=5, sticky=W)
 
             ctexto= Text(analisis)
             ctexto.grid(row=1,column=0, padx=4, pady=2)
             ctexto.configure(height=26,width=40, bg="light yellow", foreground="#000000")
             
-            textoPlano=Label(analisis, text="Texto cifrado")
+            textoPlano=Label(analisis, text="Texto cifrado",bg="black",fg="white")
             textoPlano.grid(row=0,column=1, padx=5, pady=5, sticky=W)
             
             ptexto= Text(analisis)
@@ -1210,13 +1234,13 @@ class Criptoanalisis(ttk.Frame):
                         
 
 
-            botonesFrame = Frame(analisis)
+            botonesFrame = Frame(analisis,bg="black")
             botonesFrame.grid(row=2,column=0, padx=5, pady=20)
 
-            labelPosibleClave = Label(analisis, text="Posibles Claves: ")
+            labelPosibleClave = Label(analisis, text="Posibles Claves: ",bg="black",fg="white")
             labelPosibleClave.grid(row=3,column=0,padx=20,pady=5, sticky=W)
 
-            labelEspacio = Label(analisis, text="")
+            labelEspacio = Label(analisis, text="",bg="black",fg="white")
             labelEspacio.grid(row=4,column=0,padx=20,pady=5, sticky=W)
             labelEspacio.configure(width=1,height=10)
 
@@ -1225,7 +1249,7 @@ class Criptoanalisis(ttk.Frame):
             textClave.place(x=40,y=650)
             textClave.configure(height=6,width=81, foreground="#000000", background="#FFFFFF", state="disabled")
 
-            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5)
+            botonAnalisis =Button(botonesFrame, command=analizar, text="Análisis", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
             botonAnalisis.grid(row=0,column=0)
 
 
@@ -1236,16 +1260,22 @@ class CriptoBloque(ttk.Frame):
         global mainWindow
         mainWindow=main_window
         main_window.title("Criptosistemas en Bloque")
-        main_window.configure(width=1100, height=750,)
+        main_window.configure(width=1200, height=750,bg="black")
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.place(width=1200, height=1200)
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
 
-        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
         opcionesCifrado.place(x=30,y=30)
 
-        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5)
+        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg="black",fg="white")
         cifradorLabel.grid(row=0, column=0)
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -1254,7 +1284,7 @@ class CriptoBloque(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
         self.combo.current(0)
 
-        modoLabel = Label(opcionesCifrado, text="Modo: ", padx=5, pady=5)
+        modoLabel = Label(opcionesCifrado, text="Modo: ", padx=5, pady=5,bg="black",fg="white")
         modoLabel.grid(row=1, column=0)
 
         self.modo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -1263,7 +1293,7 @@ class CriptoBloque(ttk.Frame):
         self.modo.bind("<<ComboboxSelected>>", self.seleccion)
         self.modo.current(0)
 
-        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
+        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5,bg="black",fg="white")
         claveLabel.grid(row=2, column=0)
 
         clave=Text(opcionesCifrado)
@@ -1291,17 +1321,25 @@ class CriptoBloque(ttk.Frame):
 
         labelSize.place_forget()
 
-        labelInfo=LabelFrame(self,text="Información")
-        labelInfo.place(x=400,y=30)
-        labelClave = Label(labelInfo, text="Al cifrar sin proporcionar clave, esta se generará automáticamente. El vector inicial siempre se genera automáticamente.")
+        labelInfo=LabelFrame(self,text="Información",bg="black",fg="white")
+        labelInfo.place(x=330,y=30)
+        labelClave = Label(labelInfo, text="Al cifrar sin proporcionar clave, esta se generará automáticamente. "
+                                           "El vector inicial siempre se genera automáticamente."
+                           ,bg='black',fg='white')
         labelClave.grid(row=0, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="La clave y vector inicial usados para CIFRAR se guardarán en el archivo key.txt y ivk.txt respectivamente en la carpeta del proyecto.")
+        labelCifrar = Label(labelInfo, text="La clave y vector inicial usados para CIFRAR se guardarán "
+                                            "en el archivo key.txt y ivk.txt respectivamente en la carpeta "
+                                            "del proyecto.",bg='black',fg='white')
         labelCifrar.grid(row=3, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="Si no se proporciona clave para descifrar, se usará la guardada en el archivo key.txt (si hay). El vector inicial será el almacenado en ivk.txt")
+        labelCifrar = Label(labelInfo, text="Si no se proporciona clave para descifrar, se usará la guardada en"
+                                            " el archivo key.txt (si hay). El vector inicial será el almacenado "
+                                            "en ivk.txt",bg='black',fg='white')
         labelCifrar.grid(row=4, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="La imagen resultante al cifrar se guardará en el proyecto como imagenCifrada.bmp")
+        labelCifrar = Label(labelInfo, text="La imagen resultante al cifrar se guardará en el proyecto como"
+                                            " imagenCifrada.bmp",bg='black',fg='white')
         labelCifrar.grid(row=1, column=0,sticky=W)
-        labelCifrar = Label(labelInfo, text="La imagen resultante al descifrar se guardará en el proyecto como imagen.bmp")
+        labelCifrar = Label(labelInfo, text="La imagen resultante al descifrar se guardará en el proyecto "
+                                            "como imagen.bmp",bg='black',fg='white')
         labelCifrar.grid(row=2, column=0,sticky=W)
         
 
@@ -1319,9 +1357,8 @@ class CriptoBloque(ttk.Frame):
         imageLabel2=Label(imageLabelFrame2, image=self.image2)
         imageLabel2.place(x=200,y=200, anchor="center")
 
-
-        botonesImagen = Label(self)
-        botonesImagen.place(x=200,y=620)
+        botonesImagen = Frame(self, bg='black',bd='1')
+        botonesImagen.place(x=100,y=620)
 
         for i in range(2):
             botonesImagen.columnconfigure((0,i), weight=1, pad=30)
@@ -1408,22 +1445,25 @@ class CriptoBloque(ttk.Frame):
                 main_window.deiconify()
             
 
-        botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5)
+        botonUrl =Button(botonesImagen, command=imagenUrl, text="Cargar imagen desde Url", padx=5, pady=5,
+                         font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonUrl.grid(row=1,column=0)
 
-        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde la ruta espeficicada", padx=5, pady=5)
+        botonCargar =Button(botonesImagen, command=imagenCargar, text="Cargar imagen desde la ruta espeficicada",
+                            padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCargar.grid(row=1,column=1)
 
-        botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar =Button(botonesImagen, command=cifrar, text="Cifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCifrar.grid(row=2,column=0)
 
-        botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesImagen, command=descifrar, text="Descifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonDescifrar.grid(row=2,column=1)
 
-        botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar =Button(botonesImagen, command=limpiar, text="Limpiar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonLimpiar.grid(row=2,column=2)
 
-        botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5)
+        botonCargarUltima =Button(botonesImagen, command=cargarUltima, text="Cargar última imagen cifrada", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+
         botonCargarUltima.grid(row=1,column=2)
 
     def seleccion(self, event):
@@ -1446,16 +1486,24 @@ class CriptoBloqueTexto(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Criptosistemas en Bloque")
-        main_window.configure(width=1400, height=500)
+        main_window.configure(width=1300, height=500,bg="black")
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
-        self.place(width=1400, height=500)
+        self.place(width=1300, height=500)
 
-        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
+
+
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
         opcionesCifrado.place(x=30,y=30)
 
-        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5)
+        cifradorLabel = Label(opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg="black",fg="white")
         cifradorLabel.grid(row=0, column=0)
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -1463,7 +1511,7 @@ class CriptoBloqueTexto(ttk.Frame):
         self.combo["values"] = ["DES", "3-DES", "AES", "S-DES"]
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
 
-        modoLabel = Label(opcionesCifrado, text="Modo: ", padx=5, pady=5)
+        modoLabel = Label(opcionesCifrado, text="Modo: ", padx=5, pady=5,bg="black",fg="white")
         modoLabel.grid(row=1, column=0)
 
         self.modo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -1472,20 +1520,20 @@ class CriptoBloqueTexto(ttk.Frame):
         self.modo.bind("<<ComboboxSelected>>", self.seleccion)
         self.modo.current(0)
 
-        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5)
+        claveLabel = Label(opcionesCifrado, text="Clave: ", padx=5, pady=5,bg="black",fg="white")
         claveLabel.grid(row=2, column=0)
 
         clave=Text(opcionesCifrado)
         clave.grid(row=2,column=1, sticky=W)
         clave.configure(height=1,width=16, padx=5, pady=5)
 
-        cifrarFrame = LabelFrame(self, text="Cifrar")
-        cifrarFrame.place(x=30, y=150)
+        cifrarFrame = LabelFrame(self, text="Cifrar",bg="black",fg="white")
+        cifrarFrame.place(x=30, y=180)
 
-        ctClaro = Label(cifrarFrame, text="Texto")
+        ctClaro = Label(cifrarFrame, text="Texto",bg="black",fg="white")
         ctClaro.grid(row=0, sticky=W)
 
-        ctCifrado = Label(cifrarFrame, text="Resultado")
+        ctCifrado = Label(cifrarFrame, text="Resultado",bg="black",fg="white")
         ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
 
         texto=Text(cifrarFrame)
@@ -1545,10 +1593,10 @@ class CriptoBloqueTexto(ttk.Frame):
             resultado.configure(state='disabled')
             texto.delete("1.0", END)
 
-        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame.grid(row=2, column=0)
 
-        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame2.grid(row=2, column=1)
         
         #espaciado entre botones
@@ -1557,36 +1605,45 @@ class CriptoBloqueTexto(ttk.Frame):
         for i in range(3):
             botonesFrame.columnconfigure((0,i), weight=1, pad=25)
 
-        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCifrar.grid(row=0,column=0)
 
-        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5
+                               ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonDescifrar.grid(row=0,column=1)  
 
-        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5)
+        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5
+                           ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonPegar.grid(row=0,column=2)       
 
-        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5
+                             ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonLimpiar.grid(row=0,column=0)
 
-        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
+        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCopiar.grid(row=0,column=1)
         
-        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5)
+        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5
+                                 ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonGenerarClave.grid(row=0,column=3)
 
-        instrucciones = LabelFrame(self, text="Anotaciones")
-        instrucciones.place(x=700, y= 30)
+        instrucciones = LabelFrame(self, text="Anotaciones ",bg="black",fg="white")
+        instrucciones.place(x=500, y= 30)
 
-        instruc1=Label(instrucciones, text="1. Si va a proporcionar una clave, debe corresponder a una cadena de 10 dígitos formados por 0's y 1's.")
+        instruc1=Label(instrucciones, text="1. Si va a proporcionar una clave, debe corresponder a una cadena de"
+                                           " 10 dígitos formados por 0's y 1's.",bg="black",fg='white')
         instruc1.grid(row=0, column=0, stick=W)
-        instruc1=Label(instrucciones, text="2. Si no se proporciona una clave, se generará automáticamente.")
+        instruc1=Label(instrucciones, text="2. Si no se proporciona una clave, se generará automáticamente.",bg="black",fg='white')
         instruc1.grid(row=1, column=0, stick=W)
-        instruc1=Label(instrucciones, text="3. La clave usada en el cifrado se guardará en el archivo key.txt.")
+        instruc1=Label(instrucciones, text="3. La clave usada en el cifrado se guardará en el archivo key.txt.",bg="black",fg='white')
         instruc1.grid(row=2, column=0, stick=W)
-        instruc1=Label(instrucciones, text="4. En los modos CBC, CBF y OFB el vector inicial se generará automáticamente y se guardará en el archivo ivk.txt")
+        instruc1=Label(instrucciones, text="4. En los modos CBC, CBF y OFB el vector inicial se generará automáticamente y"
+                                           " se guardará en el archivo ivk.txt",bg="black",fg='white')
         instruc1.grid(row=3, column=0, stick=W)
-        instruc1=Label(instrucciones, text="5. Al momento de desencriptar en los modos CBC, CBF y OFB el vector inicial debe estar en el archivo ivk.txt")
+        instruc1=Label(instrucciones, text="5. Al momento de desencriptar en los modos CBC, CBF y OFB el vector "
+                                           "inicial debe estar en el archivo ivk.txt",bg="black",fg='white')
         instruc1.grid(row=4, column=0, stick=W)
 
     def seleccion(self, event):
@@ -1603,21 +1660,30 @@ class CriptoBloqueTexto(ttk.Frame):
             if (self.combo.get()=="AES"):
                 labelSize.place(x=250, y=67)
 
-
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk
+from matplotlib.figure import Figure
 class CriptoGamma(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
         main_window.title("Gamma Pentagonal")
-        main_window.configure(width=1200, height=750)
+        main_window.configure(width=1300, height=750,bg="black")
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
         self.place(width=3000, height=3000)
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
 
-        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5)
+        opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
         opcionesCifrado.place(x=30,y=30)
 
-        cifradorLabel = Label(opcionesCifrado, text="Grafo: ", padx=5, pady=5)
+        cifradorLabel = Label(opcionesCifrado, text="Grafo: ", padx=5, pady=5,bg="black",fg="white")
         cifradorLabel.grid(row=0, column=0)
 
         self.combo = ttk.Combobox(opcionesCifrado,state='readonly')
@@ -1626,7 +1692,7 @@ class CriptoGamma(ttk.Frame):
         self.combo.bind("<<ComboboxSelected>>", self.seleccion)
         self.combo.current(0)
 
-        claveLabel = Label(opcionesCifrado, text="Permutación: ", padx=5, pady=5)
+        claveLabel = Label(opcionesCifrado, text="Permutación: ", padx=5, pady=5,bg="black",fg="white")
         claveLabel.grid(row=1, column=0)
 
         clave=Text(opcionesCifrado)
@@ -1645,7 +1711,8 @@ class CriptoGamma(ttk.Frame):
                 messagebox.showinfo("Advertencia","Hay un error con la permutación proporcionada.")
                 main_window.deiconify()
 
-        botonAplicar =Button(opcionesCifrado, command=aplicarPermut, text="Aplicar", padx=5, pady=5)
+        botonAplicar =Button(opcionesCifrado, command=aplicarPermut, text="Aplicar", padx=5,
+                             pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonAplicar.grid(row=2,column=0)
 
         def reiniciar():
@@ -1667,12 +1734,12 @@ class CriptoGamma(ttk.Frame):
             crearGrafo(0,0,0)
             canvas2.draw()
 
-        botonReiniciar =Button(opcionesCifrado, command=reiniciar, text="Reiniciar", padx=5, pady=5)
+        botonReiniciar =Button(opcionesCifrado, command=reiniciar, text="Reiniciar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonReiniciar.grid(row=2,column=1)
 
 
-        inicialFrame = LabelFrame(self, text="Coordenada inicial", padx=5, pady=5)
-        inicialFrame.place(x=30,y=230)
+        inicialFrame = LabelFrame(self, text="Coordenada inicial", padx=12, pady=5,bg="black",fg="white")
+        inicialFrame.place(x=30,y=200)
         xLabel = Label(inicialFrame, text="X:", padx=5, pady=5)
         xLabel.grid(row=0, column =0)
 
@@ -1708,16 +1775,17 @@ class CriptoGamma(ttk.Frame):
                 messagebox.showinfo("Advertencia", "Hay un error con las coordenadas.")
                 main_window.deiconify()
 
-        botonGenerar =Button(inicialFrame, command=generarGrafo, text="Generar grafo", padx=5, pady=5)
+        botonGenerar =Button(inicialFrame, command=generarGrafo, text="Generar grafo", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1'
+                             )
         botonGenerar.grid(row=0,column=4)
 
-        cifrarFrame = LabelFrame(self, text="Cifrar")
+        cifrarFrame = LabelFrame(self, text="Cifrar",bg="black",fg="white")
         cifrarFrame.place(x=400, y=30)
 
-        ctClaro = Label(cifrarFrame, text="Texto")
+        ctClaro = Label(cifrarFrame, text="Texto",bg="black",fg="white")
         ctClaro.grid(row=0, sticky=W)
 
-        ctCifrado = Label(cifrarFrame, text="Resultado")
+        ctCifrado = Label(cifrarFrame, text="Resultado",bg="black",fg="white")
         ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
 
         texto=Text(cifrarFrame)
@@ -1746,7 +1814,7 @@ class CriptoGamma(ttk.Frame):
                 matrixAlph.append(aux)
         inicMatrix()
 
-        fig, axs = plt.subplots(dpi=100, figsize=(4, 4), sharey=False, facecolor='#FFFFFF')
+        fig, axs = plt.subplots(dpi=100, figsize=(5, 5), sharey=False, facecolor='#FFFFFF')
         fig.suptitle('Alfabeto')
         axs.grid(which="both", color="grey", linewidth=1, linestyle="-", alpha=0.2)
 
@@ -1774,7 +1842,7 @@ class CriptoGamma(ttk.Frame):
         annotatePlot()
 
         frame= LabelFrame(self)
-        frame.place(x=30, y=300)
+        frame.place(x=400, y=300)
         frame.configure(width=200, height=200)
 
         canvas = FigureCanvasTkAgg(fig, master = frame) 
@@ -1852,7 +1920,7 @@ class CriptoGamma(ttk.Frame):
 
         
 
-        fig2 = Figure(figsize=(4, 4), dpi=100)
+        fig2 = Figure(figsize=(4.6, 4.6), dpi=100)
         fig2.suptitle('Grafo')
         a=fig2.add_subplot(111)
 
@@ -1884,7 +1952,7 @@ class CriptoGamma(ttk.Frame):
         crearGrafo(0,0,0)
 
         frame2= LabelFrame(self)
-        frame2.place(x=470, y=300)
+        frame2.place(x=870, y=300)
         frame2.configure(width=400, height=400)
 
         canvas2 = FigureCanvasTkAgg(fig2, master=frame2)
@@ -1947,10 +2015,10 @@ class CriptoGamma(ttk.Frame):
             return count
 
         def aumentarAlph(x,y):
-            vector = obtenerVector(x, y)
+            pathh = obtenerVector(x, y)
             for i in range(10):
                 for j in range(20):
-                    n = contador(i,j, vector) # n es lo que se desplaza
+                    n = contador(i,j, pathh) # n es lo que se desplaza
                     matrixAlph[i][j] = (matrixAlph[i][j]+n)%26
 
 
@@ -1968,8 +2036,10 @@ class CriptoGamma(ttk.Frame):
                 while k > 0:
                     for i in range(10):
                         for j in range(20):
+                            print(i,j, k)
                             if(chr(matrixAlph[i][j]+97)==text[len(text)-k]):
                                 cifrado+=('('+str(i)+','+str(j)+');')
+                                print(cifrado)
                                 k-=1
                             if(k==0):
                                 break
@@ -2020,10 +2090,10 @@ class CriptoGamma(ttk.Frame):
             resultado.configure(state='disabled')
             texto.delete("1.0", END)
 
-        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame.grid(row=2, column=0)
 
-        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5)
+        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
         botonesFrame2.grid(row=2, column=1)
         
         #espaciado entre botones
@@ -2032,22 +2102,23 @@ class CriptoGamma(ttk.Frame):
         for i in range(3):
             botonesFrame.columnconfigure((0,i), weight=1, pad=25)
 
-        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5)
+        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCifrar.grid(row=0,column=0)
 
-        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5)
+        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5
+                               ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonDescifrar.grid(row=0,column=1)  
 
-        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5)
+        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonPegar.grid(row=0,column=2)       
 
-        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5)
+        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonLimpiar.grid(row=0,column=0)
 
-        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5)
+        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonCopiar.grid(row=0,column=1)
         
-        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Permutación", padx=5, pady=5)
+        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Permutación", padx=5, pady=5,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
         botonGenerarClave.grid(row=0,column=3)
 
 
@@ -2061,16 +2132,32 @@ class CriptoGamma(ttk.Frame):
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
-        main_window.title("Herramientas Criptográficas")
-        main_window.configure(bg='#DCDAD5')
-        main_window.configure(width=500, height=500)
-        self.place(width=500, height=500)
-        self.style = ttk.Style()
-        self.style.configure("TCombobox", fieldbackground="white", bg="white")
-        self.style.theme_use('clam')
+        #self.style = ttk.Style(self)
+        #self.style.theme_use('default')
+        #self.style.configure('main_window',fieldbackground="blue", bg="blue")
+        main_window.title("CRIPTO MOON")
+        main_window.configure(bg='black')
+        main_window.configure(width=1000, height=500)
+        main_window.geometry("+200+200")
+        self.place(width=1000, height=500)
 
-        clasicoFrame = LabelFrame(self, text="Cifrados Clásicos", bg='#DCDAD5',padx=5, pady=5)
-        clasicoFrame.place(x=20,y=20)
+        self.image1 = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrame = LabelFrame(self)
+        imageLabelFrame.place(x=0, y=0)
+        imageLabelFrame.configure(width=1000, height=1000)
+        imageLabel = Label(imageLabelFrame, image=self.image1)
+        imageLabel.place(x=200, y=200, anchor="center")
+
+        self.image2 = ImageTk.PhotoImage(file='criptomoon.jpeg')
+        #self.image3 = ImageTk.PhotoImage(file='negro.png')
+        imageLabelFrame2 = LabelFrame(self)
+        imageLabelFrame2.place(x=280, y=30)
+        imageLabelFrame2.configure(width=470, height=80)
+        imageLabel4 = Label(imageLabelFrame2, image=self.image2)
+        imageLabel4.place(x=235, y=40, anchor="center")
+
+        clasicoFrame = LabelFrame(self, text="Cifrados Clásicos",font=('Arial',14,'bold'),fg='white', bg='black',padx=10, pady=5)
+        clasicoFrame.place(x=200,y=200)
 
 
             #funciones para los botones
@@ -2085,36 +2172,41 @@ class Inicial(ttk.Frame):
             app = Criptoanalisis(ventana)
             app.mainloop()
 
-        botonCriptosistemas =Button(clasicoFrame, command=criptosistemas, text="Criptosistemas",padx=5, pady=5)
+        botonCriptosistemas = Button(clasicoFrame, command=criptosistemas, text="CriptoSistemas",
+                                   font=('Comic Sans MS', 15, 'bold'), fg='black', padx=5, pady=5, bd=1)
         botonCriptosistemas.grid(row=0,column=0)
 
-        espacio = Label(clasicoFrame, text="  ", bg='#DCDAD5')
+        espacio = Label(clasicoFrame, text="  ", bg='black')
         espacio.grid(row=0, column=1)
 
-        botonCriptoanalisis =Button(clasicoFrame, command=criptoanalisis, text="Criptoanálisis", padx=5, pady=5)
+        botonCriptoanalisis =Button(clasicoFrame, command=criptoanalisis, text="Criptoanálisis",font=('Comic Sans MS', 15, 'bold'),
+                                    padx=5, pady=5,bd=1)
         botonCriptoanalisis.grid(row=0,column=2)
 
-        bloqueFrame = LabelFrame(self, text="Cifrado por Bloques", bg='#DCDAD5',padx=5, pady=5)
-        bloqueFrame.place(x=20,y=100)
+        bloqueFrame = LabelFrame(self, text="Cifrado por Bloques",font=("Arial",14,'bold'),fg='white',bg='black',padx=5, pady=5)
+        bloqueFrame.place(x=600,y=200)
 
         def criptoBloque():
             ventana= tk.Toplevel()
             app = CriptoBloque(ventana)
             app.mainloop()
 
-        botonCriptoBloque =Button(bloqueFrame, command=criptoBloque, text="CriptoSistemas",padx=5, pady=5)
+        botonCriptoBloque =Button(bloqueFrame, command=criptoBloque, text="CriptoSistemas",
+                                  font=('Comic Sans MS',15,'bold'),fg='black', padx=5, pady=5,bd=1)
         botonCriptoBloque.grid(row=0,column=0)
 
 
-        gammaFrame = LabelFrame(self, text="Cifrado Gamma Pentagonal", bg='#DCDAD5',padx=5, pady=5)
-        gammaFrame.place(x=20,y=170)
+        gammaFrame = LabelFrame(self, text="Cifrado Gamma Pentagonal",font=('Arial',14,'bold'),
+                                fg='white', bg='black',padx=5, pady=5)
+        gammaFrame.place(x=200,y=300)
 
         def criptoGamma():
             ventana= tk.Toplevel()
             app = CriptoGamma(ventana)
             app.mainloop()
 
-        botonCriptoGamma =Button(gammaFrame, command=criptoGamma, text="Gamma pentagonal",padx=5, pady=5)
+        botonCriptoGamma =Button(gammaFrame, command=criptoGamma, text="Gamma pentagonal",font=('Comic Sans MS', 15, 'bold'),
+                                 padx=5, pady=5)
         botonCriptoGamma.grid(row=0,column=0)
 
 
