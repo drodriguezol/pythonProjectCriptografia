@@ -10,9 +10,12 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import ImageTk,Image
 from io import BytesIO
+from tkinter.filedialog import askopenfilename
 
+from PublicKey import*
 from Cypher import*
 from Block import*
+from Signature import*
 #DANIELCRACK
 
 
@@ -132,6 +135,8 @@ class CriptoSistemas(ttk.Frame):
         super().__init__(main_window)
         global mainWindow
         mainWindow=main_window
+        mainWindow.iconbitmap('moon.ico')
+        mainWindow.resizable(0, 0)
         main_window.title("Criptosistemas Clásicos")
         main_window.configure(width=1400, height=500,bg="black")
         self.style = ttk.Style()
@@ -508,6 +513,8 @@ class CriptoSistemasImagen(ttk.Frame):
         super().__init__(main_window)
         main_window.title("Criptosistemas Clásicos")
         main_window.configure(width=1200, height=750,bg='black')
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -677,6 +684,8 @@ class Criptoanalisis(ttk.Frame):
         window = main_window
         main_window.title("Criptoanálisis")
         main_window.configure(width=780, height=800,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
         self.place(width=1400, height=950)
         self.style = ttk.Style()
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -1261,6 +1270,8 @@ class CriptoBloque(ttk.Frame):
         mainWindow=main_window
         main_window.title("Criptosistemas en Bloque")
         main_window.configure(width=1200, height=750,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -1487,6 +1498,8 @@ class CriptoBloqueTexto(ttk.Frame):
         super().__init__(main_window)
         main_window.title("Criptosistemas en Bloque")
         main_window.configure(width=1300, height=500,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -1669,6 +1682,8 @@ class CriptoGamma(ttk.Frame):
         super().__init__(main_window)
         main_window.title("Gamma Pentagonal")
         main_window.configure(width=1300, height=750,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
         self.style = ttk.Style()
         self.style.theme_use('clam')
         self.style.configure("TCombobox", fieldbackground="orange", background="white")
@@ -2129,6 +2144,552 @@ class CriptoGamma(ttk.Frame):
 
 
 
+class CriptoLlave(ttk.Frame):
+    def __init__(self, main_window):
+        super().__init__(main_window)
+        main_window.title("Criptosistemas de Llave Pública")
+        main_window.configure(width=1300, height=500,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.place(width=1300, height=500)
+
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
+
+
+        self.opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
+        self.opcionesCifrado.place(x=30,y=30)
+
+        cifradorLabel = Label(self.opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg="black",fg="white")
+        cifradorLabel.grid(row=0, column=0)
+
+        self.combo = ttk.Combobox(self.opcionesCifrado,state='readonly')
+        self.combo.grid(row=0, column=1)
+        self.combo["values"] = ["RSA", "ELGAMAL", "MV", "RABIN"]
+        self.combo.bind("<<ComboboxSelected>>", self.seleccion)
+        self.combo.current(0)
+
+        primo1Label = Label(self.opcionesCifrado, text="Primo 1: ", padx=5, pady=5,bg="black",fg="white")
+        primo1Label.grid(row=1, column=0)
+
+        primo1Texto = Text(self.opcionesCifrado)
+        primo1Texto.grid(row=1, column=1, sticky=W)
+        primo1Texto.configure(height=1,width=16, padx=5, pady=5)
+
+        self.primo2Label = Label(self.opcionesCifrado, text="Primo 2: ", padx=5, pady=5,bg="black",fg="white")
+        self.primo2Label.grid(row=2, column=0)
+
+        self.primo2Texto = Text(self.opcionesCifrado)
+        self.primo2Texto.grid(row=2, column=1, sticky=W)
+        self.primo2Texto.configure(height=1,width=16, padx=5, pady=5)
+
+        def generarPrimo():
+            if self.combo.get()=="RSA":
+                try:
+                    primo1Texto.insert(1.0,"")
+                    primo1=generatePrime()
+                    primo1Texto.insert(1.0, primo1)
+
+                    self.primo2Texto.insert(1.0,"")
+                    primo2=generatePrime()
+                    self.primo2Texto.insert(1.0, primo2)
+                except:
+                    messagebox.showinfo("Advertencia","No se han podido generar los números.")
+                    main_window.deiconify()
+
+
+            elif self.combo.get()=="ELGAMAL":
+                try:
+                    primo1Texto.insert(1.0,"")
+                    primo1=generatePrime()
+                    primo1Texto.insert(1.0, primo1)
+                except:
+                    messagebox.showinfo("Advertencia","No se ha podido generar el número.")
+                    main_window.deiconify()
+
+
+        def aplicarDatos():
+            if self.combo.get()=="RSA":
+                try:
+                    primo1= int(primo1Texto.get("1.0","end-1c"))
+                    primo2= int(self.primo2Texto.get("1.0","end-1c"))
+                    e,n = generateRsaData(primo1, primo2)
+                    texto1.configure(state="normal")
+                    texto1.insert(INSERT, e)
+                    texto1.configure(state="disabled")
+                    texto2.configure(state="normal")
+                    texto2.insert(INSERT, n)
+                    texto2.configure(state="disabled")
+                except:
+                    messagebox.showinfo("Advertencia","Los campos deben corresponder a números primos.")
+                    main_window.deiconify()
+            
+            elif self.combo.get()=="ELGAMAL":
+                try:
+                    primo1= int(primo1Texto.get("1.0","end-1c"))
+                    alpha, a, alpha_a = generateGamalData(primo1)
+                    texto1.configure(state="normal")
+                    texto1.insert(INSERT, primo1)
+                    texto1.configure(state="disabled")
+                    texto2.configure(state="normal")
+                    texto2.insert(INSERT, alpha)
+                    texto2.configure(state="disabled")
+                    self.texto3.configure(state="normal")
+                    self.texto3.insert(INSERT, alpha_a)
+                    self.texto3.configure(state="disabled")
+
+                except:
+                    messagebox.showinfo("Advertencia","El campo debe corresponder a un número primo.")
+                    main_window.deiconify()
+
+        botonGenerar =Button(self.opcionesCifrado, command=generarPrimo, text="Generar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
+        botonGenerar.grid(row=3,column=0)
+
+        botonAplicar =Button(self.opcionesCifrado, command=aplicarDatos, text="Aplicar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
+        botonAplicar.grid(row=3,column=1)
+
+        self.generadoFrame = LabelFrame(self, text="Datos Generados", padx=5, pady=5,bg="black",fg="white")
+        self.generadoFrame.place(x=330,y=30)
+        
+        texto1 = Text(self.generadoFrame)
+        texto1.grid(row=0, column=1, sticky=W)
+        texto1.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+
+        self.texto1Label = Label(self.generadoFrame, text="e", font=(2), padx=5, pady=5,bg="black",fg="white")
+        self.texto1Label.grid(row=0, column=0)
+
+        texto2 = Text(self.generadoFrame)
+        texto2.grid(row=1, column=1, sticky=W)
+        texto2.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+
+        self.texto2Label = Label(self.generadoFrame, text="n", font=(2), padx=5, pady=5,bg="black",fg="white")
+        self.texto2Label.grid(row=1, column=0)
+
+        self.texto3 = Text(self.generadoFrame)
+        self.texto3.grid(row=2, column=1, sticky=W)
+        self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+        self.texto3.destroy()
+
+        self.texto3Label = Label(self.generadoFrame, text="Dato 3: ", padx=5, pady=5,bg="black",fg="white")
+        self.texto3Label.grid(row=2, column=0)
+        self.texto3Label.destroy()
+
+        cifrarFrame = LabelFrame(self, text="Cifrar",bg="black",fg="white")
+        cifrarFrame.place(x=30, y=180)
+
+        ctClaro = Label(cifrarFrame, text="Texto",bg="black",fg="white")
+        ctClaro.grid(row=0, sticky=W)
+
+        ctCifrado = Label(cifrarFrame, text="Resultado",bg="black",fg="white")
+        ctCifrado.grid(row=0, column=1, sticky=W, padx=4, pady=2)
+
+        texto=Text(cifrarFrame)
+        texto.grid(row=1,column=0, padx=4, pady=2)
+        texto.configure(height=10,width=25, bg="light yellow", foreground="#000000")
+
+        resultado=Text(cifrarFrame)
+        resultado.grid(row=1,column=1, padx=4, pady=2)
+        resultado.configure(height=10,width=25, bg="light cyan", foreground="#000000", state="disabled")
+
+
+        #funciones para los botones
+        def cifrar():
+            if self.combo.get()=="RSA":
+                try: 
+                    primo1= int(primo1Texto.get("1.0","end-1c"))
+                    primo2= int(self.primo2Texto.get("1.0","end-1c"))
+                    text=texto.get("1.0","end-1c")
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, "----".join(RsaCifrar(text,primo1,primo2)))
+                    resultado.configure(state='disabled')
+                except:           
+                    messagebox.showinfo("Advertencia","Hay un error con el texto o la clave no ha sido proporcionada ni generada.")
+                    main_window.deiconify()
+
+            elif self.combo.get()=="ELGAMAL":
+                try:
+                    primo1 = int(primo1Texto.get("1.0","end-1c"))
+                    text=texto.get("1.0","end-1c")
+                    alpha=int(texto2.get("1.0","end-1c"))
+                    alpha_a=int(self.texto3.get("1.0","end-1c"))
+                    r = ElgamalCifrar(text,primo1,alpha_a,alpha)
+                    r="----".join(r)
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, r)
+                    resultado.configure(state='disabled')
+                except:
+                    messagebox.showinfo("Advertencia","Hay un error con el texto o la clave no ha sido proporcionada ni generada.")
+                    main_window.deiconify()
+
+                             
+        def descifrar():
+            if self.combo.get()=="RSA":
+                try:    
+                    primo1= int(primo1Texto.get("1.0","end-1c"))
+                    primo2= int(self.primo2Texto.get("1.0","end-1c"))
+                    text=texto.get("1.0","end-1c").split('----')
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, RsaDescifrar(text,primo1,primo2))
+                    resultado.configure(state='disabled')
+                except:
+                    messagebox.showinfo("Advertencia","Hay un error con el texto a descifrar, asegurese que los cifrados estén separados por ----." )
+                    main_window.deiconify()
+
+
+            elif self.combo.get()=="ELGAMAL":
+                try:
+                    text=texto.get("1.0","end-1c").split('----')
+                    resultado.configure(state='normal')
+                    resultado.delete("1.0", END)
+                    resultado.insert(INSERT, "".join(ElgamalDescifrar(text)))
+                    resultado.configure(state='disabled')
+                except:
+                    messagebox.showinfo("Advertencia","Hay un error con el texto a descifrar, asegurese que los cifrados estén separados por ----." )
+                    main_window.deiconify()
+
+        def copiar_al_portapapeles():
+            self.clipboard_clear()
+            self.clipboard_append(resultado.get("1.0","end-1c"))
+
+        def pegar():
+            texto.delete("1.0", END)
+            texto.insert(INSERT, self.clipboard_get())
+            
+        def generarclave():
+            pass
+
+        def limpiar():
+            resultado.configure(state='normal')
+            resultado.delete("1.0", END)
+            resultado.configure(state='disabled')
+            texto.delete("1.0", END)
+
+        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
+        botonesFrame.grid(row=2, column=0)
+
+        botonesFrame2 = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
+        botonesFrame2.grid(row=2, column=1)
+        
+        #espaciado entre botones
+        for i in range(2):
+            botonesFrame2.columnconfigure((0,i), weight=1, pad=30)
+        for i in range(3):
+            botonesFrame.columnconfigure((0,i), weight=1, pad=25)
+
+        botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonCifrar.grid(row=0,column=0)
+
+        botonDescifrar =Button(botonesFrame, command=descifrar, text="Descifrar", padx=5, pady=5
+                               ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonDescifrar.grid(row=0,column=1)  
+
+        botonPegar =Button(botonesFrame, command=pegar, text="Pegar", padx=5, pady=5
+                           ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonPegar.grid(row=0,column=2)       
+
+        botonLimpiar =Button(botonesFrame2, command=limpiar, text="Limpiar", padx=5, pady=5
+                             ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonLimpiar.grid(row=0,column=0)
+
+        botonCopiar =Button(botonesFrame2, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonCopiar.grid(row=0,column=1)
+        
+        botonGenerarClave=Button(botonesFrame2, command=generarclave, text="Generar Clave", padx=5, pady=5
+                                 ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonGenerarClave.grid(row=0,column=3)
+
+        instrucciones = LabelFrame(self, text="Anotaciones ",bg="black",fg="white")
+        instrucciones.place(x=500, y= 30)
+
+        instruc1=Label(instrucciones, text="1. Si va a proporcionar una clave, debe corresponder a una cadena de"
+                                           " 10 dígitos formados por 0's y 1's.",bg="black",fg='white')
+        instruc1.grid(row=0, column=0, stick=W)
+
+
+    def seleccion(self, event):
+        index=0
+        if (self.combo.get()=="RSA"):
+                index=0
+                self.primo2Label = Label(self.opcionesCifrado, text="Primo 2: ", padx=5, pady=5,bg="black",fg="white")
+                self.primo2Label.grid(row=2, column=0)
+                self.primo2Texto = Text(self.opcionesCifrado)
+                self.primo2Texto.grid(row=2, column=1, sticky=W)
+                self.primo2Texto.configure(height=1,width=16, padx=5, pady=5)
+                self.texto3.destroy()
+                self.texto3Label.destroy()
+                self.texto1Label.configure(text="e", font=(2))
+                self.texto2Label.configure(text="n",font=(2))
+        elif (self.combo.get()=="ELGAMAL"):
+                index=1
+                self.primo2Label.destroy()
+                self.primo2Texto.destroy()
+                self.texto1Label.configure(text="p", font=(2))
+                self.texto2Label.configure(text="α",font=(2))
+                self.texto3 = Text(self.generadoFrame)
+                self.texto3.grid(row=2, column=1, sticky=W)
+                self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+                self.texto3Label = Label(self.generadoFrame, text="α^a", font=(2), padx=5, pady=5,bg="black",fg="white")
+                self.texto3Label.grid(row=2, column=0)
+                
+        #self.texto3Label.grid(row=2, column=0)
+        elif (self.combo.get()=="AES"):
+                index=2
+        self.combo.current(index)
+        #if (not self.combo.get()=="S-DES"):
+        #    self = CriptoBloque(mainWindow)
+        #    self.combo.current(index)
+        #    if (self.combo.get()=="AES"):
+        #        labelSize.place(x=250, y=67)
+
+
+class CriptoFirma(ttk.Frame):
+    def __init__(self, main_window):
+        super().__init__(main_window)
+        self.mainWindow = main_window
+        main_window.title("Criptosistemas de Llave Pública")
+        main_window.configure(width=1300, height=500,bg="black")
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+        self.style.configure("TCombobox", fieldbackground="orange", background="white")
+        self.place(width=1300, height=500)
+
+        self.imagespace = ImageTk.PhotoImage(file='space.jpg')
+        imageLabelFrames = LabelFrame(self)
+        imageLabelFrames.place(x=0, y=0)
+        imageLabelFrames.configure(width=3000, height=3000)
+        imageLabels = Label(imageLabelFrames, image=self.imagespace)
+        imageLabels.place(x=200, y=200, anchor="center")
+
+
+        self.opcionesCifrado = LabelFrame(self, text="Opciones de Cifrado", padx=5, pady=5,bg="black",fg="white")
+        self.opcionesCifrado.place(x=30,y=30)
+
+        cifradorLabel = Label(self.opcionesCifrado, text="Cifrador: ", padx=5, pady=5,bg="black",fg="white")
+        cifradorLabel.grid(row=0, column=0)
+
+        self.combo = ttk.Combobox(self.opcionesCifrado,state='readonly')
+        self.combo.grid(row=0, column=1)
+        self.combo["values"] = ["Firmar", "Verificar"]
+        self.combo.bind("<<ComboboxSelected>>", self.seleccion)
+        self.combo.current(0)
+
+        self.filename=""
+
+        def cargar():
+            self.filename = askopenfilename()
+            ruta.configure(state="normal")
+            ruta.insert(INSERT,self.filename)
+            ruta.configure(state="disabled")
+            main_window.deiconify()
+        
+        botonCargar =Button(self.opcionesCifrado, command=cargar, text="Cargar archivo", padx=5, pady=5
+                            ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
+        botonCargar.grid(row=1,column=0)
+
+        ruta = Text(self.opcionesCifrado)
+        ruta.grid(row=1, column=1, sticky=W)
+        ruta.configure(height=1,width=16, padx=5, pady=5, state="disabled")
+
+        self.primo1Label = Label(self.opcionesCifrado, text="Primo p: ", padx=5, pady=5,bg="black",fg="white")
+        self.primo1Label.grid(row=2, column=0)
+
+        self.primo1Texto = Text(self.opcionesCifrado)
+        self.primo1Texto.grid(row=2, column=1, sticky=W)
+        self.primo1Texto.configure(height=1,width=16, padx=5, pady=5)
+
+        def generarPrimo():
+            try:
+                self.primo1Texto.insert(1.0,"")
+                primo1=generatePrime()
+                self.primo1Texto.insert(1.0, primo1)
+            except:
+                messagebox.showinfo("Advertencia","No se ha podido generar el número.")
+                main_window.deiconify()
+
+        def aplicarDatos():            
+            try:
+                if self.combo.get()=="Verificar":
+                    file_in = open("public_key.txt", "r")
+                    primo1 = int(file_in.readline().rstrip())
+                    alpha = int(file_in.readline().rstrip())
+                    alpha_a = int(file_in.readline().rstrip())
+                    file_in.close()
+                    file_in = open("signature.txt", "r")
+                    S2 = file_in.read()
+                    file_in.close()
+                    texto.configure(state='normal')
+                    texto.delete("1.0", END)
+                    texto.insert(INSERT, S2)
+                    texto.configure(state='disabled')
+                else:
+                    primo1= int(self.primo1Texto.get("1.0","end-1c"))
+                    alpha, a, alpha_a = generateGamalData(primo1)
+                texto1.configure(state="normal")
+                texto1.insert(INSERT, primo1)
+                texto1.configure(state="disabled")
+                texto2.configure(state="normal")
+                texto2.insert(INSERT, alpha)
+                texto2.configure(state="disabled")
+                self.texto3.configure(state="normal")
+                self.texto3.insert(INSERT, alpha_a)
+                self.texto3.configure(state="disabled")
+
+            except:
+                messagebox.showinfo("Advertencia","Hay un error con el primo proporcionado o los archivos de texto.")
+                main_window.deiconify()
+
+        self.botonGenerar =Button(self.opcionesCifrado, command=generarPrimo, text="Generar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
+        self.botonGenerar.grid(row=3,column=0)
+
+        botonAplicar =Button(self.opcionesCifrado, command=aplicarDatos, text="Aplicar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
+        botonAplicar.grid(row=3,column=1)
+
+        self.generadoFrame = LabelFrame(self, text="Datos Generados", padx=5, pady=5,bg="black",fg="white")
+        self.generadoFrame.place(x=330,y=30)
+        
+        texto1 = Text(self.generadoFrame)
+        texto1.grid(row=0, column=1, sticky=W)
+        texto1.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+
+        self.texto1Label = Label(self.generadoFrame, text="p", font=(2), padx=5, pady=5,bg="black",fg="white")
+        self.texto1Label.grid(row=0, column=0)
+
+        texto2 = Text(self.generadoFrame)
+        texto2.grid(row=1, column=1, sticky=W)
+        texto2.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+
+        self.texto2Label = Label(self.generadoFrame, text="α", font=(2), padx=5, pady=5,bg="black",fg="white")
+        self.texto2Label.grid(row=1, column=0)
+
+        self.texto3 = Text(self.generadoFrame)
+        self.texto3.grid(row=2, column=1, sticky=W)
+        self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
+
+        self.texto3Label = Label(self.generadoFrame, text="α^a: ", font=(2), padx=5, pady=5,bg="black",fg="white")
+        self.texto3Label.grid(row=2, column=0)
+
+        cifrarFrame = LabelFrame(self, text="Cifrar",bg="black",fg="white")
+        cifrarFrame.place(x=30, y=180)
+
+        ctClaro = Label(cifrarFrame, text="Firma",bg="black",fg="white")
+        ctClaro.grid(row=0, sticky=W)
+
+        texto=Text(cifrarFrame)
+        texto.grid(row=1,column=0, padx=4, pady=2)
+        texto.configure(height=10,width=50, bg="light yellow", foreground="#000000", state="disabled" )
+
+
+        #funciones para los botones
+        def cifrar():
+                try:
+                    if self.combo.get()=="Verificar":
+                        if(check(self.filename)):
+                            messagebox.showinfo("En hora buena","La firma corresponde al archivo. El contenido del archivo no se ha modificado")
+                            main_window.deiconify()
+                        else:
+                            messagebox.showinfo("Advertencia","Es posible que el archivo haya sido modificado")
+                            main_window.deiconify()
+                    else:
+                        p = int(self.primo1Texto.get("1.0","end-1c"))
+                        alpha=int(texto2.get("1.0","end-1c"))
+                        alpha_a=int(self.texto3.get("1.0","end-1c"))
+                        signature(self.filename, p, alpha, alpha_a)
+                        file_in = open("signature.txt", "r")
+                        r = file_in.read()
+                        file_in.close()
+                        texto.configure(state='normal')
+                        texto.delete("1.0", END)
+                        texto.insert(INSERT, r)
+                        texto.configure(state='disabled')
+                except:
+                    messagebox.showinfo("Advertencia","Hay un error con la clave. No ha sido proporcionada ni generada.")
+                    main_window.deiconify()
+
+        def copiar_al_portapapeles():
+            self.clipboard_clear()
+            self.clipboard_append(texto.get("1.0","end-1c"))
+            
+        def limpiar():
+            texto.configure(state='normal')
+            texto.delete("1.0", END)
+            texto.configure(state='disabled')
+            ruta.configure(state='normal')
+            ruta.delete("1.0", END)
+            ruta.configure(state='disabled')
+            self.filename=""
+            self.primo1Texto.delete("1.0", END)
+            texto1.configure(state='normal')
+            texto1.delete("1.0", END)
+            texto1.configure(state='disabled')
+            texto2.configure(state='normal')
+            texto2.delete("1.0", END)
+            texto2.configure(state='disabled')
+            self.texto3.configure(state='normal')
+            self.texto3.delete("1.0", END)
+            self.texto3.configure(state='disabled')
+
+        botonesFrame = Frame(cifrarFrame, border=0,padx=5,pady=5,bg="black")
+        botonesFrame.grid(row=2, column=0)
+
+        #espaciado entre botones
+        for i in range(3):
+            botonesFrame.columnconfigure((0,i), weight=1, pad=25)
+
+        self.botonCifrar =Button(botonesFrame, command=cifrar, text="Cifrar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        self.botonCifrar.grid(row=0,column=0)
+
+        self.botonLimpiar =Button(botonesFrame, command=limpiar, text="Limpiar", padx=5, pady=5
+                             ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        self.botonLimpiar.grid(row=0,column=2)
+
+        botonCopiar =Button(botonesFrame, command=copiar_al_portapapeles, text="Copiar", padx=5, pady=5
+                            ,font=('Comic Sans MS', 15, 'bold'), fg='black',bd='1')
+        botonCopiar.grid(row=0,column=1)
+
+        instrucciones = LabelFrame(self, text="Anotaciones ",bg="black",fg="white")
+        instrucciones.place(x=500, y= 30)
+
+        instruc1=Label(instrucciones, text="1. Si va a proporcionar una clave, debe corresponder a una cadena de"
+                                           " 10 dígitos formados por 0's y 1's.",bg="black",fg='white')
+        instruc1.grid(row=0, column=0, stick=W)
+
+
+    def seleccion(self, event):
+        index=0
+        if (self.combo.get()=="Firmar"):
+                index=0
+                app = CriptoFirma(self.mainWindow)
+                app.mainloop()
+        elif (self.combo.get()=="Verificar"):
+                self.botonGenerar.destroy()
+                self.botonCifrar.configure(text="Verificar")
+                self.botonLimpiar.invoke()
+                self.primo1Label.destroy()
+                self.primo1Texto.destroy()
+                index=1
+        self.combo.current(index)
+    
+        
+
 class Inicial(ttk.Frame):
     def __init__(self, main_window):
         super().__init__(main_window)
@@ -2140,6 +2701,8 @@ class Inicial(ttk.Frame):
         main_window.configure(width=1000, height=500)
         main_window.geometry("+200+200")
         self.place(width=1000, height=500)
+        main_window.iconbitmap('moon.ico')
+        main_window.resizable(0, 0)
 
         self.image1 = ImageTk.PhotoImage(file='space.jpg')
         imageLabelFrame = LabelFrame(self)
@@ -2208,6 +2771,31 @@ class Inicial(ttk.Frame):
         botonCriptoGamma =Button(gammaFrame, command=criptoGamma, text="Gamma pentagonal",font=('Comic Sans MS', 15, 'bold'),
                                  padx=5, pady=5)
         botonCriptoGamma.grid(row=0,column=0)
+
+        llaveFrame = LabelFrame(self, text="Cifrado LLave Pública",font=('Arial',14,'bold'),
+                                fg='white', bg='black',padx=5, pady=5)
+        llaveFrame.place(x=500,y=300)
+
+        def criptoLLave():
+            ventana= tk.Toplevel()
+            app = CriptoLlave(ventana)
+            app.mainloop()
+
+        botonCriptoLlave =Button(llaveFrame, command=criptoLLave, text="Criptosistemas",font=('Comic Sans MS', 15, 'bold'),
+                                 padx=5, pady=5)
+        botonCriptoLlave.grid(row=0,column=0)
+
+        def criptoFirma():
+            ventana= tk.Toplevel()
+            app = CriptoFirma(ventana)
+            app.mainloop()
+
+        espacio = Label(llaveFrame, text="  ", bg='black')
+        espacio.grid(row=0, column=1)
+
+        botonCriptoFirma =Button(llaveFrame, command=criptoFirma, text="Firma Digital",font=('Comic Sans MS', 15, 'bold'),
+                                 padx=5, pady=5)
+        botonCriptoFirma.grid(row=0,column=2)
 
 
 
