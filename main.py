@@ -2292,6 +2292,9 @@ class CriptoLlave(ttk.Frame):
                     messagebox.showinfo("Advertencia","El campo debe corresponder a un número primo.")
                     main_window.deiconify()
 
+            elif self.combo.get()=="RABIN":
+                pass
+
         botonGenerar =Button(self.opcionesCifrado, command=generarPrimo, text="Generar Primo(s)", padx=5, pady=5
                             ,font=('Comic Sans MS', 12, 'bold'), fg='black',bd='1')
         botonGenerar.grid(row=3,column=0)
@@ -2322,8 +2325,7 @@ class CriptoLlave(ttk.Frame):
         self.texto3.grid(row=2, column=1, sticky=W)
         self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
         
-
-        self.texto3Label = Label(self.generadoFrame, text="Dato 3: ", padx=5, pady=5,bg="black",fg="white")
+        self.texto3Label = Label(self.generadoFrame, text="", padx=5, pady=5,bg="black",fg="white")
         self.texto3Label.grid(row=2, column=0)
         
 
@@ -2332,15 +2334,15 @@ class CriptoLlave(ttk.Frame):
         self.textoX.configure(height=1,width=16, padx=5, pady=5,state="disabled")
         
 
-        self.textoXLabel = Label(self.generadoFrame, text="gx: ", padx=5, pady=5,bg="black",fg="white")
+        self.textoXLabel = Label(self.generadoFrame, text="", padx=5, pady=5,bg="black",fg="white")
         self.textoXLabel.grid(row=3, column=0)
 
         self.textoY = Text(self.generadoFrame)
         self.textoY.grid(row=3, column=3, sticky=W)
         self.textoY.configure(height=1,width=16, padx=5, pady=5,state="disabled")
 
-        self.textoYLabel = Label(self.generadoFrame, text="gy: ", padx=5, pady=5,bg="black",fg="white")
-        self.textoYLabel.grid(row=2, column=2)
+        self.textoYLabel = Label(self.generadoFrame, text="", padx=5, pady=5,bg="black",fg="white")
+        self.textoYLabel.grid(row=3, column=2)
 
 
         def limpiarValores():
@@ -2371,12 +2373,6 @@ class CriptoLlave(ttk.Frame):
             except:
                 pass
 
-        self.texto3.destroy()
-        self.texto3Label.destroy()
-        self.textoX.destroy()
-        self.textoXLabel.destroy()
-        self.textoY.destroy()
-        self.textoYLabel.destroy()
 
         cifrarFrame = LabelFrame(self, text="Cifrar",bg="black",fg="white")
         cifrarFrame.place(x=30, y=180)
@@ -2594,90 +2590,44 @@ class CriptoLlave(ttk.Frame):
         #time.sleep(0.5)
         if (self.combo.get()=="RSA"):
                 index=0
-                app = CriptoLlave(self.mainWindow)
-                app.mainloop()
-                #self.combo.bind("<<ComboboxSelected>>", self.seleccion)
-
-                self.botonAplicar.grid(row=3,column=1)
-                self.generadoFrame.place(x=330,y=30)
-                self.primo2Label = Label(self.opcionesCifrado, text="Primo 2: ", padx=5, pady=5,bg="black",fg="white")
+                self.primo2Label.configure(text="Primo 2: ")
                 self.primo2Label.grid(row=2, column=0)
                 self.primo2Texto = Text(self.opcionesCifrado)
                 self.primo2Texto.grid(row=2, column=1, sticky=W)
                 self.primo2Texto.configure(height=1,width=16, padx=5, pady=5)
                 self.texto1Label.configure(text="e", font=(2))
                 self.texto2Label.configure(text="n",font=(2))
-                self.texto3.destroy()
-                self.texto3Label.destroy()
-                self.textoXLabel.destroy()
-                self.textoX.destroy()
-                self.textoYLabel.destroy()
-                self.textoY.destroy()
+                self.texto3Label.configure(text="")
+                self.textoXLabel.configure(text="")
+                self.textoYLabel.configure(text="")
                 
 
         elif (self.combo.get()=="ELGAMAL"):
                 index=1
-                self.botonAplicar.grid(row=3,column=1)
-                self.generadoFrame.place(x=330,y=30)
-                self.primo2Label.destroy()
-                self.primo2Texto.destroy()
+                self.primo2Label.configure(text="")
                 self.texto1Label.configure(text="p", font=(2))
                 self.texto2Label.configure(text="α",font=(2))
-                self.texto3 = Text(self.generadoFrame)
-                self.texto3.grid(row=2, column=1, sticky=W)
-                self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
-                self.texto3Label = Label(self.generadoFrame, padx=5, pady=5,bg="black",fg="white")
                 self.texto3Label.configure(text="α^a", font=(2))
-                self.texto3Label.grid(row=2, column=0)
-                self.textoXLabel.destroy()
-                self.textoX.destroy()
-                self.textoYLabel.destroy()
-                self.textoY.destroy()
+                self.textoXLabel.configure(text="")
+                self.textoYLabel.configure(text="")
 
         elif (self.combo.get()=="MV"):
                 index=2
-                
-                self.botonAplicar.grid(row=3,column=1)
-                self.generadoFrame.place(x=330,y=30)
-                self.primo2Label.destroy()
-                self.primo2Texto.destroy()
-
+                self.primo2Label.configure(text="")
                 self.texto1Label.configure(text="a", font=(2))
                 self.texto2Label.configure(text="b",font=(2))
-
-                self.texto3Label = Label(self.generadoFrame, padx=5, pady=5,bg="black",fg="white")
-                self.texto3Label.grid(row=2, column=0)
                 self.texto3Label.configure(text="p", font=(2))
-
-                self.texto3 = Text(self.generadoFrame)
-                self.texto3.configure(height=1,width=16, padx=5, pady=5,state="disabled")
-                self.texto3.grid(row=2, column=1, sticky=W)
-
-                self.textoXLabel = Label(self.generadoFrame,padx=5, pady=5,bg="black",fg="white")
                 self.textoXLabel.configure(text="gx: ", font=(2))
-                self.textoXLabel.grid(row=3, column=0)
-
-                self.textoX = Text(self.generadoFrame)
-                self.textoX.configure(height=1,width=16, padx=5, pady=5,state="disabled")
-                self.textoX.grid(row=3, column=1, sticky=W)
-
-                self.textoYLabel = Label(self.generadoFrame,padx=5, pady=5,bg="black",fg="white")
                 self.textoYLabel.configure(text="gy: ", font=(2))
-                self.textoYLabel.grid(row=3, column=2)
-
-                self.textoY = Text(self.generadoFrame)
-                self.textoY.configure(height=1,width=16, padx=5, pady=5,state="disabled")
-                self.textoY.grid(row=3, column=3, sticky=W)
 
         elif (self.combo.get()=="RABIN"):
                 index=3
-                self.generadoFrame.place_forget()
-                self.botonAplicar.grid_remove()
-                self.primo2Label = Label(self.opcionesCifrado, text="Primo 2: ", padx=5, pady=5,bg="black",fg="white")
-                self.primo2Label.grid(row=2, column=0)
-                self.primo2Texto = Text(self.opcionesCifrado)
-                self.primo2Texto.grid(row=2, column=1, sticky=W)
-                self.primo2Texto.configure(height=1,width=16, padx=5, pady=5)
+                self.primo2Label.configure(text="Primo 2: ")
+                self.texto1Label.configure(text="")
+                self.texto2Label.configure(text="")
+                self.texto3Label.configure(text="")
+                self.textoXLabel.configure(text="")
+                self.textoYLabel.configure(text="")
         self.combo.current(index)
         
 
