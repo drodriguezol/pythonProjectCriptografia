@@ -1,40 +1,49 @@
-import hashlib
-from PublicKey import*
+from Crypto.PublicKey import RSA
+from Crypto.Signature import pkcs1_15
+from Crypto.Hash import SHA256
+import base64
 
-def hashSign(filename):
-    with open(filename, 'rb') as opened_file:
-        file= opened_file.read()
-        hash= hashlib.sha224()
-        hash.update(file)
-    return hash.hexdigest()
-
-def signature(filename, p, alpha, alpha_a):
-    ciph= ElgamalCifrar(hashSign(filename),p,alpha_a,alpha)
-    file_out = open("signature.txt", "w")
-    file_out.write(str(ciph))
+def CrearClavesFirma():
+    key = RSA.generate(2048)
+    private_key = key.export_key()
+    file_out = open("private.key", "wb")
+    file_out.write(private_key)
+    file_out.close()
+    public_key = key.publickey().export_key()
+    file_out = open("public.key", "wb")
+    file_out.write(public_key)
     file_out.close()
 
+###########################################
 
-def check(filename):
-    M = hashSign(filename)
-    file_in = open("ak.txt", "r")
-    S1 = int(file_in.read())
+def firmar(file):
+    CrearClavesFirma()
+    with open(file,"rb") as opened_file:
+        f=base64.b64encode(opened_file.read())
+    privatekey = RSA.import_key(open('private.key').read())
+    h = SHA256.new(f)
+    signer=pkcs1_15.new(privatekey)
+    signature=signer.sign(h)
+    file_out = open("signature.pem", "wb")
+    file_out.write(signature)
+    file_out.close()
+    return True
+    #print(signature.hex())
+
+########################################################
+
+def Verificar(file):
+    publickey = RSA.import_key(open("public.key").read())
+    file_in = open(file, "rb")
+    with file_in as opened_file:
+        message=base64.b64encode(opened_file.read())
     file_in.close()
-    file_in = open("signature.txt", "r")
-    S2 = file_in.read()
+    file_in = open("signature.pem", "rb")
+    signature=file_in.read()
     file_in.close()
-    file_in = open("public_key.txt", "r")
-    p = int(file_in.readline().rstrip())
-    e1 = int(file_in.readline().rstrip())
-    e2 = int(file_in.readline().rstrip())
-    file_in.close()
-    V1=pow(e1,M)
-    V1=V1%p
-    V2=pow(e2,S1)*pow(S1,S2)
-    V2=V2%p
-    if V1==V2:
+    h = SHA256.new(message)
+    try:
+        pkcs1_15.new(publickey).verify(h, signature)
         return True
-    else:
+    except (ValueError, TypeError):
         return False
-
-
